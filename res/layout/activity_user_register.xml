@@ -1,0 +1,116 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".UserRegisterActivity" >
+
+    <!-- Info User form -->
+
+    <ScrollView
+        android:id="@+id/info_user_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp" >
+
+        <LinearLayout
+            style="@style/UserFormContainer"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_form_user_register"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:stretchColumns="2" >
+
+                <TableRow android:padding="5dip" >
+ 
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:gravity="right"
+                        android:text="Name"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:text=":"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:gravity="left"
+                        android:text="" />
+ 
+                </TableRow>
+
+                <TableRow android:padding="1dip"/>
+                <TableRow android:padding="5dip" >
+ 
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:gravity="right"
+                        android:text="Address"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:text=":"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:gravity="left"
+                        android:text="" />
+ 
+                </TableRow>
+
+                <TableRow android:padding="5dip" >
+ 
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:gravity="right"
+                        android:text="Phone"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:text=":"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:gravity="left"
+                        android:text="" />
+ 
+                </TableRow>
+ 
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</merge>

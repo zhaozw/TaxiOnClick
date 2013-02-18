@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TaxiPlus</string>
+    <string name="dummy_content">Taxi&#160;&#160;&#160;&#160;Plus</string>
+    <string name="dummy_button">Acceder</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">TaxiPlus</string>
+    <string name="title_activity_user_register">UserRegisterActivity</string>
+    <string name="label_button_get_taxi">Taxi!</string>
+    <string name="hint_actual_address_edittext">Buscando direccion&#8230;</string>
+    <string name="label_form_user_register">Usuario</string>
+
+</resources>
