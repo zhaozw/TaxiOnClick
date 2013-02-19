@@ -42,6 +42,8 @@ public class MainActivity extends SherlockMapActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		getSupportActionBar().setIcon(R.drawable.logo_top);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		this.mMapView = (PolarisMapView) findViewById(R.id.polaris_map_view);
 		this.mMapView.setUserTrackingButtonEnabled(true);

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="min_list_item_height_with_padding">70.0dip</dimen>
+    <dimen name="whitespace">10.0dip</dimen>
+    <dimen name="min_list_item_height">60.0dip</dimen>
+    <dimen name="list_item_text">18.0dip</dimen>
+
+</resources>

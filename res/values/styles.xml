@@ -41,11 +41,71 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:cacheColorHint">#000000</item>
     </style>
-    
-     <style name="UserFormContainer">
+
+    <style name="UserFormContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="ListView.ItemText.Title" parent="@style/ListView.ItemText">
+        <item name="android:textSize">@dimen/list_item_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ff4c566c</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:paddingLeft">20.0dip</item>
+        <item name="android:paddingRight">20.0dip</item>
+    </style>
+
+    <style name="ListView.ItemText" parent="@style/ListView">
+        <item name="android:textSize">@dimen/list_item_text</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/list_button_text</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:paddingLeft">20.0dip</item>
+        <item name="android:paddingRight">20.0dip</item>
+    </style>
+
+    <style name="ListView" parent="@style/GenericListView" />
+
+    <style name="GenericListView" parent="@android:style/Widget.ListView">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:listSelector">@color/transparent</item>
+        <item name="android:scrollingCache">false</item>
+        <item name="android:cacheColorHint">@color/transparent</item>
+        <item name="android:divider">@drawable/list_divider</item>
+        <item name="android:dividerHeight">1.0dip</item>
+        <item name="android:itemBackground">@color/transparent</item>
+        <item name="android:dropDownSelector">@color/transparent</item>
+        <item name="android:headerDividersEnabled">false</item>
+        <item name="android:footerDividersEnabled">false</item>
+        <item name="android:smoothScrollbar">true</item>
+    </style>
+
+    <style name="ListView.Edit" parent="@style/ListView.ItemText">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:padding">20.0dip</item>
+        <item name="android:cursorVisible">true</item>
+         <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:background">@drawable/list_divider</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1.0dip</item>
+    </style>
+    
+    <style name="ListView.FakedContainer" parent="@style/ListView">
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/background_list_single</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:divider">@drawable/fake_list_divider_vertical</item>
+        <item name="android:dividerHeight">1.0dip</item>
     </style>
 
 </resources>
