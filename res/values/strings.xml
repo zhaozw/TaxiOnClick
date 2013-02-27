@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">mitaxiapp</string>
+    <!-- String Global App -->
+    <string name="app_name">mitaxi</string>
+
+    <!-- String data from Splash -->
     <string name="dummy_content">Taxi&#160;&#160;&#160;&#160;Plus</string>
     <string name="dummy_button">Acceder</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+
+    <!-- Title from Activities -->
     <string name="title_activity_main">TaxiPlus</string>
     <string name="title_activity_user_register">Registro</string>
+
+    <!-- String data from MainActivity -->
     <string name="label_button_get_taxi">Taxi!</string>
     <string name="hint_actual_address_edittext">Buscando direccion&#8230;</string>
+
+    <!-- String data from Register -->
     <string name="label_form_user_register">Usuario</string>
     <string name="label_form_mail_user_register">Correo</string>
     <string name="label_name_user">Nombre</string>
-    <string name="label_decorator">:</string>
     <string name="label_phone_user">Teléfono</string>
     <string name="label_button_register">Registrarme</string>
+
+    <!-- String data from error -->
+    <string name="empty_error_field">Este campo es necesario</string>
+    <string name="error_internet_connection">No hay acceso a internet. Verifique su conexión</string>
+    <string name="invalid_mail">Email incorrecto</string>
+    <string name="error_register_user">No es posible establecer conexión con el servicio. Intente mas tarde.</string>
+
+    <!-- String from dialog register user -->
+    <string name="dialog_message_sending_register">Registrando&#8230;</string>
 
 </resources>

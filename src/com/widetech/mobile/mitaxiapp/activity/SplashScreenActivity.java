@@ -1,6 +1,9 @@
-package com.widetech.mobile.taxionclick.activity;
+package com.widetech.mobile.mitaxiapp.activity;
 
-import com.widetech.mobile.taxionclick.activity.util.SystemUiHider;
+import com.widetech.mobile.mitaxiapp.activity.util.SystemUiHider;
+import com.widetech.mobile.mitaxiapp.facade.FacadeUser;
+import com.widetech.mobile.mitaxiapp.object.User;
+import com.widetech.mobile.taxionclick.activity.R;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -120,8 +123,26 @@ public class SplashScreenActivity extends Activity {
 		mButtonAccess.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				startActivity(new Intent(getApplicationContext(),
-						UserRegisterActivity.class));
+
+				try {
+					User user = FacadeUser.read();
+
+					if (user == null) {
+						Intent intentRegister = new Intent(
+								getApplicationContext(),
+								UserRegisterActivity.class);
+						startActivity(intentRegister);
+						finish();
+					} else {
+						Intent intentMain = new Intent(getApplicationContext(),
+								MainActivity.class);
+						startActivity(intentMain);
+						finish();
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 			}
 		});
 

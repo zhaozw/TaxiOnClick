@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- url for register user mitaxiapp -->
+    <string name="url_taxis"> http://186.28.255.229/bogota/wstaxcenter.asmx/</string>
+
+    <!-- method name register user -->
+    <string name="method_name_set_customer_record">SetCustomerRecord</string>
+
+    <!-- parameters register user -->
+    <string name="parameter_user">strUser</string>
+    <string name="parameter_password">strPassword</string>
+    <string name="parameter_phone_number">strPhoneNumber</string>
+    <string name="parameter_full_name">strFullName</string>
+    <string name="parameter_email_address">strEmailAddress</string>
+    <string name="parameter_address">strAddress</string>
+    <string name="parameter_sector">strSectorName</string>
+    <string name="parameter_note">strNote</string>
+    <string name="parameter_imei">strIMEI</string>
+
+</resources>

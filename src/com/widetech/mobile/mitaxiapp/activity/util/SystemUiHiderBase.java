@@ -1,4 +1,4 @@
-package com.widetech.mobile.taxionclick.activity.util;
+package com.widetech.mobile.mitaxiapp.activity.util;
 
 import android.app.Activity;
 import android.view.View;

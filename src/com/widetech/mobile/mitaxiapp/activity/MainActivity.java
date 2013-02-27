@@ -1,4 +1,4 @@
-package com.widetech.mobile.taxionclick.activity;
+package com.widetech.mobile.mitaxiapp.activity;
 
 import java.util.Locale;
 import main.java.com.actionbarsherlock.app.SherlockMapActivity;
@@ -16,8 +16,9 @@ import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.PolarisMapView;
 import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListener;
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
-import com.widetech.mobile.taxionclick.activity.util.Config;
-import com.widetech.mobile.taxionclick.listener.ListenerLocation;
+import com.widetech.mobile.mitaxiapp.activity.util.Config;
+import com.widetech.mobile.mitaxiapp.listener.ListenerLocation;
+import com.widetech.mobile.taxionclick.activity.R;
 
 public class MainActivity extends SherlockMapActivity implements
 		OnRegionChangedListener, OnAnnotationSelectionChangedListener {
