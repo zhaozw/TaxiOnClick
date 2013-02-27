@@ -1,5 +1,5 @@
 /*
- * DetailLogger.java
+ * WideTechLogger.java
  *
  * Created on December 11, 2012
  */

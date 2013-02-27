@@ -11,6 +11,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.cyrilmottier.polaris.Annotation;
 import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.PolarisMapView;
@@ -131,6 +134,15 @@ public class MainActivity extends SherlockMapActivity implements
 		if (Config.INFO_LOGS_ENABLED) {
 			Log.i(LOG_TAG, "onAnnotationClicked");
 		}
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		menu.add("").setIcon(R.drawable.ic_action_address)
+				.setNumericShortcut('1')
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	private void obtainLocation() {
