@@ -7,6 +7,12 @@
     <!-- method name register user -->
     <string name="method_name_set_customer_record">SetCustomerRecord</string>
 
+    <!-- method name get id Service Taxi -->
+    <string name="method_name_get_id_service">SetServiceMobile2</string>
+
+    <!-- method name get mobile -->
+    <string name="method_name_get_service_mobile">GetServiceMobile</string>
+
     <!-- parameters register user -->
     <string name="parameter_user">strUser</string>
     <string name="parameter_password">strPassword</string>
@@ -17,5 +23,22 @@
     <string name="parameter_sector">strSectorName</string>
     <string name="parameter_note">strNote</string>
     <string name="parameter_imei">strIMEI</string>
+
+    <!-- parameters get service taxis -->
+    <string name="parameter_user_service">strUser</string>
+    <string name="parameter_password_service">strPassword</string>
+    <string name="parameter_phone_number_service">strPhoneNumber</string>
+    <string name="parameter_type_service">intType</string>
+    <string name="parameter_total_taxis_service">intTotal</string>
+    <string name="parameter_date_service">dtmStartDate</string>
+    <string name="parameter_address_service">strAddress</string>
+    <string name="parameter_sector_service">strSectorName</string>
+    <string name="parameter_imei_service">strIMEI</string>
+    <string name="parameter_note_service">strNota</string>
+
+    <!-- parameters get mobile taxis -->
+    <string name="parameter_user_get_service_mobile">strUser</string>
+    <string name="parameter_pass_get_service_mobile">strPassword</string>
+    <string name="parameter_id_get_service_mobile">ServiceID</string>
 
 </resources>

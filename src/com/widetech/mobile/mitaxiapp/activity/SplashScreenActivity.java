@@ -1,9 +1,9 @@
 package com.widetech.mobile.mitaxiapp.activity;
 
+import com.widetech.mobile.mitaxiapp.activity.R;
 import com.widetech.mobile.mitaxiapp.activity.util.SystemUiHider;
 import com.widetech.mobile.mitaxiapp.facade.FacadeUser;
 import com.widetech.mobile.mitaxiapp.object.User;
-import com.widetech.mobile.taxionclick.activity.R;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -86,11 +86,48 @@
         <item name="android:smoothScrollbar">true</item>
     </style>
 
+    <style name="ListItemFancy">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:background">@drawable/list_item_background</item>
+    </style>
+
+    <style name="ListItemNote">
+        <item name="android:background">@drawable/background_note_card</item>
+    </style>
+
+    <style name="ListItemNoteTitle">
+        <item name="android:textColor">@color/text_title</item>
+        <item name="android:textSize">@dimen/text_size_note_list_title</item>
+    </style>
+
+    <style name="ListItemNoteDescription">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/text_description</item>
+        <item name="android:paddingBottom">@dimen/margin_default</item>
+        <item name="android:textSize">@dimen/text_size_note_list_description</item>
+    </style>
+
+    <style name="ListMobile">
+        <item name="android:background">@color/background_app</item>
+        <item name="android:dividerHeight">@dimen/margin_default</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:padding">@dimen/padding_default</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:drawSelectorOnTop">true</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
     <style name="ListView.Edit" parent="@style/ListView.ItemText">
         <item name="android:background">@color/transparent</item>
         <item name="android:padding">20.0dip</item>
         <item name="android:cursorVisible">true</item>
-         <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textCursorDrawable">@null</item>
     </style>
 
     <style name="Divider">
@@ -98,7 +135,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">1.0dip</item>
     </style>
-    
+
     <style name="ListView.FakedContainer" parent="@style/ListView">
         <item name="android:orientation">vertical</item>
         <item name="android:background">@drawable/background_list_single</item>
@@ -106,6 +143,16 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:divider">@drawable/fake_list_divider_vertical</item>
         <item name="android:dividerHeight">1.0dip</item>
+    </style>
+
+    <style name="MenuContent">
+        <item name="android:dividerHeight">@dimen/margin_default</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:padding">@dimen/padding_default</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:layout_width">@dimen/sliding_menu_width_default</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/actionbar_background</item>
     </style>
 
 </resources>

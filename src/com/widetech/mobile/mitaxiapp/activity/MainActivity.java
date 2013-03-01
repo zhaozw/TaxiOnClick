@@ -1,17 +1,20 @@
 package com.widetech.mobile.mitaxiapp.activity;
 
-import java.util.Locale;
+import java.util.ArrayList;
 import main.java.com.actionbarsherlock.app.SherlockMapActivity;
 import android.content.Context;
-import android.location.Geocoder;
+import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
+import android.widget.ListView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.cyrilmottier.polaris.Annotation;
@@ -19,27 +22,40 @@ import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.PolarisMapView;
 import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListener;
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
+import com.google.android.maps.GeoPoint;
+import com.widetech.mobile.mitaxiapp.activity.R;
 import com.widetech.mobile.mitaxiapp.activity.util.Config;
+import com.widetech.mobile.mitaxiapp.adapters.AddressAdapter;
+import com.widetech.mobile.mitaxiapp.components.ui.widgets.SlideMenu;
+import com.widetech.mobile.mitaxiapp.facade.FacadeAddress;
 import com.widetech.mobile.mitaxiapp.listener.ListenerLocation;
-import com.widetech.mobile.taxionclick.activity.R;
+import com.widetech.mobile.mitaxiapp.object.Address;
 
 public class MainActivity extends SherlockMapActivity implements
 		OnRegionChangedListener, OnAnnotationSelectionChangedListener {
 
+	// UI References
 	private static final String LOG_TAG = "MainActivity";
-
 	private PolarisMapView mMapView;
-	private Geocoder mGeodoer;
 	private EditText mEditTextAddress;
+	private SlideMenu mSlideMenu;
+	private ListView mListAddress;
+	private AddressAdapter mAddressAdapter;
+	private Button mButtonGetTaxi;
+
+	private String mAddress;
 
 	// Vars Geolocalization via GPS
 	private LocationManager mLocManager;
 	private Location mLocation;
 	private ListenerLocation mLocationListener;
+	private Criteria mCriteria;
 
 	// Vars Coords
 	private double latitude = 0;
 	private double longitude = 0;
+
+	private ArrayList<Address> currentAddress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +65,15 @@ public class MainActivity extends SherlockMapActivity implements
 		getSupportActionBar().setIcon(R.drawable.logo_top);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+		this.mSlideMenu = (SlideMenu) findViewById(R.id.slide_menu);
 		this.mMapView = (PolarisMapView) findViewById(R.id.polaris_map_view);
+		this.mMapView.getController().setZoom(12);
 		this.mMapView.setUserTrackingButtonEnabled(true);
 		this.mMapView.setOnRegionChangedListenerListener(this);
 		this.mMapView.setOnAnnotationSelectionChangedListener(this);
-		this.mMapView.getController().setZoom(17);
 
 		this.mEditTextAddress = (EditText) findViewById(R.id.editTextActualAddress);
+		this.mButtonGetTaxi = (Button) findViewById(R.id.button_get_taxi);
 
 		// Init GPS Listener and Listener Location
 		this.mLocationListener = new ListenerLocation(getApplicationContext());
@@ -63,13 +81,49 @@ public class MainActivity extends SherlockMapActivity implements
 		this.mLocation = this.mLocManager
 				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		this.mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				30000, 0, this.mLocationListener);
+				0, 0, this.mLocationListener);
 
-		this.mGeodoer = new Geocoder(getApplicationContext(),
-				Locale.getDefault());
+		try {
+			this.currentAddress = FacadeAddress.readAllAddress();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		this.mListAddress = (ListView) findViewById(R.id.main_lv_list_tags);
+		this.mAddressAdapter = new AddressAdapter(this, this.currentAddress);
+		this.mListAddress.setAdapter(this.mAddressAdapter);
+
+		this.mListAddress.setOnItemClickListener(onItemClickAddressListView);
+		this.mButtonGetTaxi.setOnClickListener(onClickButtonGetTaxi);
 
 		this.obtainLocation();
 	}
+
+	/**
+	 * Click on Address ListView
+	 */
+	private final AdapterView.OnItemClickListener onItemClickAddressListView = new AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> adapterView, View view,
+				int position, long id) {
+
+			mEditTextAddress.setText(((Address) mAddressAdapter
+					.getItem(position)).getAdreess());
+			mSlideMenu.toggle();
+		}
+	};
+
+	/**
+	 * Click on Button Obtain Taxi Service
+	 */
+	private final View.OnClickListener onClickButtonGetTaxi = new View.OnClickListener() {
+
+		public void onClick(View view) {
+			// TODO Auto-generated method stub
+			attemptService();
+		}
+	};
 
 	@Override
 	protected void onStart() {
@@ -145,6 +199,31 @@ public class MainActivity extends SherlockMapActivity implements
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		char number = item.getNumericShortcut();
+
+		switch (number) {
+		case '1':
+			mSlideMenu.toggle();
+			break;
+
+		default:
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mSlideMenu.isMenuOpen()) {
+			mSlideMenu.toggle();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
 	private void obtainLocation() {
 
 		if (this.mLocation != null) {
@@ -159,29 +238,62 @@ public class MainActivity extends SherlockMapActivity implements
 		Log.i(LOG_TAG, "Coordenadas por el listener - Longitud: " + longitude);
 
 		try {
-			Log.i(LOG_TAG, "Coordenadas por el listener - Latitud: "
+
+			if (mCriteria == null) {
+				mCriteria = new Criteria();
+				mCriteria.setAccuracy(Criteria.ACCURACY_FINE);
+			}
+
+			mLocManager.getBestProvider(mCriteria, true);
+
+			Log.i(LOG_TAG, "Coordenadas por el mapa - Latitud: "
 					+ this.mMapView.getMapCenter().getLatitudeE6());
-			Log.i(LOG_TAG, "Coordenadas por el listener - Longitud: "
+			Log.i(LOG_TAG, "Coordenadas por el mapa - Longitud: "
 					+ this.mMapView.getMapCenter().getLongitudeE6());
 
-			String address = this.mGeodoer
-					.getFromLocation(
-							(this.mMapView.getMapCenter().getLatitudeE6() / 1E6),
-							(this.mMapView.getMapCenter().getLongitudeE6() / 1E6),
-							1).get(0).getAddressLine(0);
+			GeoPoint altPoint = new GeoPoint(((int) (this.latitude * 1E6)),
+					((int) (this.longitude * 1E6)));
 
-			if (address != null && !(address.isEmpty()))
-				this.mEditTextAddress.setText(address);
-			else
-
-				Toast.makeText(getApplicationContext(),
-						"No podemos determinar tu ubicación", Toast.LENGTH_LONG)
-						.show();
+			this.mMapView.getController().setCenter(altPoint);
+			this.mMapView.getController().animateTo(altPoint);
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 
+	}
+
+	protected void attemptService() {
+
+		// Reset Errors
+		this.mEditTextAddress.setError(null);
+
+		// Store values at the time of the service attempt.
+		this.mAddress = this.mEditTextAddress.getText().toString();
+
+		boolean cancel = false;
+		View focusView = null;
+
+		// Check if name is empty
+		if (TextUtils.isEmpty(this.mAddress)) {
+			this.mEditTextAddress
+					.setError(getString(R.string.empty_error_field));
+			focusView = this.mEditTextAddress;
+			cancel = true;
+		}
+
+		if (cancel) {
+			// There was an error; don't attempt register and focus the first
+			// form field with an error.
+			focusView.requestFocus();
+		} else {
+
+			Intent intentSolciteService = new Intent(getApplicationContext(),
+					ServiceActivity.class);
+			intentSolciteService.putExtra("address_service", mAddress);
+			startActivity(intentSolciteService);
+
+		}
 	}
 }

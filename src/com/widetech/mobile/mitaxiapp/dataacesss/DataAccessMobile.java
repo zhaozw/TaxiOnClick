@@ -122,6 +122,34 @@ public class DataAccessMobile implements DataAccess {
 		return (T) mobile;
 	}
 
+	public ArrayList<Mobile> readMobilesForIdService(int id) {
+		ArrayList<Mobile> services = new ArrayList<Mobile>();
+
+		this.database.open();
+		Cursor mCursor = this.database.getDataBase().query(
+				SQLConstants.TABLE_NAME_MOBILE, SQLConstants.fieldsMobile,
+				SQLConstants.MOBILE_ID_SERVICE + "=" + id, null, null, null,
+				null);
+		if (mCursor != null) {
+			if (mCursor.moveToFirst()) {
+				do {
+					Mobile mobile = new Mobile();
+					mobile.setId_service(mCursor.getInt(0));
+					mobile.setPlate(mCursor.getString(1));
+					mobile.setMobile(mCursor.getString(2));
+					mobile.setId_position(mCursor.getString(3));
+					mobile.setStatus(mCursor.getInt(4));
+					services.add(mobile);
+				} while (mCursor.moveToNext());
+			}
+		}
+		if (mCursor != null)
+			mCursor.close();
+
+		this.database.close();
+		return services;
+	}
+
 	public Vector<Mobile> readAll() {
 		Vector<Mobile> services = new Vector<Mobile>();
 

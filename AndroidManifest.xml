@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.widetech.mobile.taxionclick.activity"
+    package="com.widetech.mobile.mitaxiapp.activity"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="12"
-        android:targetSdkVersion="17" />
+        android:minSdkVersion="10"
+        android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -34,12 +34,26 @@
         </activity>
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.UserRegisterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_user_register" >
+        </activity>
+        <activity
+            android:name="com.widetech.mobile.mitaxiapp.activity.ServiceActivity"
+            android:label="@string/title_activity_service"
+            android:parentActivityName="com.actionbarsherlock.app.SherlockActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.actionbarsherlock.app.SherlockActivity" />
+        </activity>
+        <activity
+            android:name="com.widetech.mobile.mitaxiapp.activity.MobileListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_mobile_list" >
         </activity>
     </application>
 

@@ -42,7 +42,7 @@ public class SlideMenu extends FrameLayout {
     }
 
     private void init(Context context) {
-        openMenuDetector = new GestureDetector(context,tapToCloseListener);
+       // openMenuDetector = new GestureDetector(context,tapToCloseListener);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SlideMenu extends FrameLayout {
     }
 
     public void open() {
-        contentView.setOnTouchListener(disableTouchesWhenOpenListener);
+        //contentView.setOnTouchListener(disableTouchesWhenOpenListener);
         contentView.setFocusable(false);
         menuView.setVisibility(View.VISIBLE);
         menuOpen = true;
@@ -92,7 +92,7 @@ public class SlideMenu extends FrameLayout {
     }
 
     public void close() {
-        contentView.setOnTouchListener(null);
+        //contentView.setOnTouchListener(null);
         contentView.setFocusable(true);
         menuView.setVisibility(View.VISIBLE);
         menuOpen = false;
@@ -157,7 +157,8 @@ public class SlideMenu extends FrameLayout {
     /**
      * Touch listener to intercept everything while the menu is open
      */
-    private final OnTouchListener disableTouchesWhenOpenListener = new OnTouchListener() {
+    @SuppressWarnings("unused")
+	private final OnTouchListener disableTouchesWhenOpenListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             openMenuDetector.onTouchEvent(motionEvent);
@@ -168,7 +169,8 @@ public class SlideMenu extends FrameLayout {
     /**
      * Touch detector to handle tapping the content view to close it
      */
-    private GestureDetector.SimpleOnGestureListener tapToCloseListener = new GestureDetector.SimpleOnGestureListener(){
+    @SuppressWarnings("unused")
+	private GestureDetector.SimpleOnGestureListener tapToCloseListener = new GestureDetector.SimpleOnGestureListener(){
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             playSoundEffect(SoundEffectConstants.CLICK);

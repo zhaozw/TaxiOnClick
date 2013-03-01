@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <SeekBar
+            android:id="@+id/seekBarTotalTaxis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:max="5"
+            android:progressDrawable="@drawable/seekbar_progress"/>
+
+        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+
+            <EditText
+                android:id="@+id/totalTaxis"
+                style="@style/ListView.Edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_total_taxis"
+                android:inputType="textEmailAddress"
+                android:textStyle="normal" />
+        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+
+        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+
+            <EditText
+                android:id="@+id/address"
+                style="@style/ListView.Edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_address_service"
+                android:inputType="textMultiLine"
+                android:textStyle="normal" />
+        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+
+        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+
+            <EditText
+                android:id="@+id/neighborhood"
+                style="@style/ListView.Edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_neighborhood_service"
+                android:inputType="textMultiLine"
+                android:textStyle="normal" />
+        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+
+        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+
+            <EditText
+                android:id="@+id/point"
+                style="@style/ListView.Edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_point_service"
+                android:inputType="textMultiLine"
+                android:textStyle="normal" />
+        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+
+        <Button
+            android:id="@+id/send_info_service"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_accept_service"
+            android:textColor="#000000"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+</ScrollView>

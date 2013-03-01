@@ -6,4 +6,15 @@
     <dimen name="min_list_item_height">60.0dip</dimen>
     <dimen name="list_item_text">18.0dip</dimen>
 
+    <!-- Default -->
+    <dimen name="padding_default">8dp</dimen>
+    <dimen name="margin_default">6dp</dimen>
+    <dimen name="radius_default">5dp</dimen>
+    <dimen name="sliding_menu_width_default">240dp</dimen>
+    <dimen name="text_size_default">17dp</dimen>
+    <dimen name="text_size_note_list_title">21sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="text_size_note_list_description">15sp</dimen>
+
 </resources>

@@ -28,8 +28,29 @@
     <string name="error_internet_connection">No hay acceso a internet. Verifique su conexión</string>
     <string name="invalid_mail">Email incorrecto</string>
     <string name="error_register_user">No es posible establecer conexión con el servicio. Intente mas tarde.</string>
+    <string name="error_number_of_taxis">Debe pedir un Taxi por lo menos!</string>
+    <string name="mobile_not_found">De momento no encontramos un taxi para ti. Por favor intenta más tarde!</string>
+    <string name="service_mobile_canceled">Servicio Cancelado!</string>
 
-    <!-- String from dialog register user -->
+    <!-- String from dialogs -->
     <string name="dialog_message_sending_register">Registrando&#8230;</string>
+    <string name="title_activity_service">Solicitar Servicio</string>
+    <string name="dialog_message_get_mobile">Solicitando Servicio!</string>
+    <string name="title_dialog_add_new_address">Dirección nueva</string>
+    <string name="message_dialog_add_new_address">Deseas agregar esta dirección a tus favoritas?</string>
+
+    <!-- String from activity Service -->
+    <string name="label_total_taxis">Total Taxis:</string>
+    <string name="label_address_service">Direccion</string>
+    <string name="label_neighborhood_service">Barrio</string>
+    <string name="label_point_service">Punto de Referencia</string>
+    <string name="label_accept_service">Aceptar</string>
+    <string name="title_activity_mobile_list">Taxis En Curso</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- String from buttons dialog -->
+    <string name="label_button_dialog_ok">Si</string>
+    <string name="label_button_dialog_cancel">No</string>
 
 </resources>

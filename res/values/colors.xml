@@ -63,6 +63,9 @@
     <color name="tab_text_shadow">#245066</color>
     <color name="list_button_text">#ff444444</color>
     <color name="transparent">@android:color/transparent</color>
-     <color name="list_divider">#ffe2e2e2</color>
+    <color name="list_divider">#ffe2e2e2</color>
+    <color name="background_menu">#80000000</color>
+    <color name="text_title">#ff989089</color>
+    <color name="background_app">#ebebeb</color>
 
 </resources>

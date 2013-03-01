@@ -69,7 +69,7 @@ public class DataAccessAddress implements DataAccess {
 		if (mCursor != null)
 			mCursor.close();
 
-		this.database.open();
+		this.database.close();
 		return listaddress;
 	}
 
@@ -107,6 +107,40 @@ public class DataAccessAddress implements DataAccess {
 		this.database.close();
 
 		return (T) mobile;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T findAddress(String addressParam) {
+		Address address = null;
+
+		try {
+			this.database.open();
+			Cursor mCursor = null;
+			mCursor = this.database.getDataBase().query(
+					SQLConstants.TABLE_NAME_ADDRESS,
+					SQLConstants.fieldsAddress,
+					SQLConstants.ADDRESS_DESC + " like " + "'%" + addressParam
+							+ "%'", null, null, null, null);
+
+			if (mCursor != null) {
+				if (mCursor.moveToFirst()) {
+					address = new Address();
+					address.setAdreess(mCursor.getString(0));
+					address.setNeighborhood(mCursor.getString(1));
+					address.setNote(mCursor.getString(2));
+				}
+
+				mCursor.close();
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		this.database.close();
+
+		return (T) address;
 	}
 
 	public void delete() {

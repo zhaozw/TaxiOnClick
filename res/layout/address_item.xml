@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItemNote"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <!-- ListRow Left sied Thumbnail image business row -->
+
+    <LinearLayout
+        android:id="@+id/thumbnail_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip" >
+
+        <ImageView
+            android:id="@+id/list_image_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_action_address" />
+    </LinearLayout>
+
+    <!-- Address -->
+
+    <TextView
+        android:id="@+id/AddressItem"
+        style="@style/ListItemNoteTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail_address"
+        android:layout_toRightOf="@+id/thumbnail_address" />
+
+</RelativeLayout>

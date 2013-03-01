@@ -18,7 +18,6 @@ package com.widetech.mobile.mitaxiapp.activity.util;
 import java.lang.reflect.Field;
 import android.util.Log;
 
-
 /**
  * @author Cyril Mottier
  */
@@ -36,9 +35,12 @@ public class Config {
 	//
 	// /////////////////////////////////////////////////////////////
 
-	private static final String LOCAL_CONFIG_CLASS_NAME = "com.widetech.mobile.taxionclick.activity.util.Config";
+	private static final String LOCAL_CONFIG_CLASS_NAME = "com.widetech.mobile.mitaxiapp.activity.util.Config";
 	private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0xy_mDiBNwQRQwnOq6zpebGWSwVEI3cEZpiZC3w";
 	private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0xy_mDiBNwQRQwnOq6zpebGWSwVEI3cEZpiZC3w";
+
+	public static final String GOOGLE_MAPS_API_KEY_RELEASE = "<YOUR_RELEASE_KEY>";
+	public static final String GOOGLE_MAPS_API_KEY_DEBUG = "<YOUR_DEBUG_KEY>";
 
 	private static final Class<?> LOCAL_CONFIG_CLASS = getLocalConfig();
 
@@ -79,7 +81,7 @@ public class Config {
 	/**
 	 * The current compilation target
 	 */
-	private static final int COMPILATION_TARGET = com.widetech.mobile.taxionclick.activity.BuildConfig.DEBUG ? COMPILATION_TARGET_DEBUG
+	private static final int COMPILATION_TARGET = com.widetech.mobile.mitaxiapp.activity.BuildConfig.DEBUG ? COMPILATION_TARGET_DEBUG
 			: COMPILATION_TARGET_RELEASE;
 
 	// /////////////////////////////////////////////////////////////

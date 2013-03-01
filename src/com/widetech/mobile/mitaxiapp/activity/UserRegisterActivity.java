@@ -7,13 +7,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.widetech.mobile.log.WidetechLogger;
+import com.widetech.mobile.mitaxiapp.activity.R;
 import com.widetech.mobile.mitaxiapp.facade.FacadeAddress;
 import com.widetech.mobile.mitaxiapp.facade.FacadeUser;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
 import com.widetech.mobile.mitaxiapp.object.Address;
 import com.widetech.mobile.mitaxiapp.object.User;
 import com.widetech.mobile.mitaxiapp.xml.XmlFetcherRegisterUser;
-import com.widetech.mobile.taxionclick.activity.R;
 import com.widetech.mobile.tools.GlobalConstants;
 import com.widetech.mobile.tools.WideTechTools;
 import android.app.ProgressDialog;
@@ -165,7 +165,7 @@ public class UserRegisterActivity extends SherlockActivity {
 			// Building Parameters
 			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-			// Add POST Parameters products
+			// Add POST Parameters Register
 
 			// Parameter user plattform
 			parameters.add(new BasicNameValuePair(
@@ -259,10 +259,9 @@ public class UserRegisterActivity extends SherlockActivity {
 					User user = new User(mPhone, mName, mName, mMail);
 					long stu = FacadeUser.create(user);
 
-					Address address = new Address(
-							GlobalConstants.ADDRESS_WILDCARD,
+					Address address = new Address("Calle 70 # 9-87",
 							GlobalConstants.SECTOR_WILDCARD,
-							GlobalConstants.NOTE_WILDCARD); 
+							GlobalConstants.NOTE_WILDCARD);
 
 					long sta = FacadeAddress.create(address);
 
@@ -278,6 +277,12 @@ public class UserRegisterActivity extends SherlockActivity {
 						Intent intent = new Intent(getApplicationContext(),
 								MainActivity.class);
 						startActivity(intent);
+
+						Address addresso = new Address("Cra 117 89 A 25 ",
+								GlobalConstants.SECTOR_WILDCARD,
+								GlobalConstants.NOTE_WILDCARD);
+
+						FacadeAddress.create(addresso);
 						finish();
 					} else
 						Toast.makeText(getApplicationContext(),
