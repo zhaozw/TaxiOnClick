@@ -5,7 +5,7 @@
     <string name="app_name">mitaxi</string>
 
     <!-- String data from Splash -->
-    <string name="dummy_content">Taxi&#160;&#160;&#160;&#160;Plus</string>
+    <string name="dummy_content">WideTech S.A</string>
     <string name="dummy_button">Acceder</string>
 
     <!-- Title from Activities -->
@@ -13,7 +13,7 @@
     <string name="title_activity_user_register">Registro</string>
 
     <!-- String data from MainActivity -->
-    <string name="label_button_get_taxi">Taxi!</string>
+    <string name="label_button_get_taxi">Solicitar Servicio!</string>
     <string name="hint_actual_address_edittext">Buscando direccion&#8230;</string>
 
     <!-- String data from Register -->
@@ -38,6 +38,7 @@
     <string name="dialog_message_get_mobile">Solicitando Servicio!</string>
     <string name="title_dialog_add_new_address">Dirección nueva</string>
     <string name="message_dialog_add_new_address">Deseas agregar esta dirección a tus favoritas?</string>
+    <string name="dialog_message_find_position_taxi">Ubicando el taxi&#8230;</string>
 
     <!-- String from activity Service -->
     <string name="label_total_taxis">Total Taxis:</string>
@@ -52,5 +53,18 @@
     <!-- String from buttons dialog -->
     <string name="label_button_dialog_ok">Si</string>
     <string name="label_button_dialog_cancel">No</string>
+
+    <!-- String from buttons QuickActions Mobile -->
+    <string name="label_quick_action_cancel_mobile">Cancelar servicio</string>
+    <string name="label_quick_action_view_positon_mobile">Posicion taxi</string>
+    <string name="title_activity_position_taxi">Ubicacion actual del taxi</string>
+
+    <!-- String from tags icon actionbarsherlock main -->
+    <string name="label_ic_address_bar">Direcciones</string>
+    <string name="label_ic_profile_bar">Perfil</string>
+    <string name="title_activity_edit_profile">Editar Perfil</string>
+    
+    <!--  String from tags icon actionbarsherlock edit profile -->
+    <string name="label_ic_save_profile">Guardar</string>
 
 </resources>

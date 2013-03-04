@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            style="@style/ListView.ItemText.Title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10.0dip"
+            android:text="@string/label_form_user_register" />
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="0"
+            android:stretchColumns="1" >
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_item_first"
+                android:minHeight="@dimen/min_list_item_height_with_padding"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/ListView.ItemText"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:paddingLeft="@dimen/whitespace"
+                    android:paddingRight="0.0dip"
+                    android:singleLine="true"
+                    android:text="@string/label_name_user"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/name"
+                    style="@style/ListView.Edit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.0"
+                    android:ellipsize="end"
+                    android:hint="@string/label_name_user"
+                    android:inputType="textCapWords"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow style="@style/Divider" />
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_item_last"
+                android:minHeight="@dimen/min_list_item_height_with_padding" >
+
+                <TextView
+                    style="@style/ListView.ItemText"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:paddingLeft="@dimen/whitespace"
+                    android:paddingRight="0.0dip"
+                    android:singleLine="true"
+                    android:text="@string/label_phone_user"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/phone"
+                    style="@style/ListView.Edit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.0"
+                    android:ellipsize="end"
+                    android:hint="@string/label_phone_user"
+                    android:inputType="phone"
+                    android:textStyle="normal" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            style="@style/ListView.ItemText.Title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_form_mail_user_register" />
+
+        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+
+            <EditText
+                android:id="@+id/email"
+                style="@style/ListView.Edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:hint="@string/label_form_mail_user_register"
+                android:inputType="textEmailAddress"
+                android:textStyle="normal" />
+        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+    </LinearLayout>
+
+</ScrollView>

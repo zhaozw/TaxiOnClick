@@ -36,6 +36,12 @@ public class GlobalConstants {
 	// Password for validate web service
 	public static final String PASS_SERVICE = "widetech";
 
+	// User for validate web service actual location taxi
+	public static final String USER_TAXI = "taxi";
+
+	// Password for validate web service location taxi
+	public static final String PASS_TAXI = "taxi";
+
 	// Address wildcard
 	public static final String ADDRESS_WILDCARD = "Calle 70 # 9-87";
 

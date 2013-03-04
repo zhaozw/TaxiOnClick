@@ -22,7 +22,6 @@ import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.PolarisMapView;
 import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListener;
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
-import com.google.android.maps.GeoPoint;
 import com.widetech.mobile.mitaxiapp.activity.R;
 import com.widetech.mobile.mitaxiapp.activity.util.Config;
 import com.widetech.mobile.mitaxiapp.adapters.AddressAdapter;
@@ -64,10 +63,12 @@ public class MainActivity extends SherlockMapActivity implements
 		setContentView(R.layout.activity_main);
 		getSupportActionBar().setIcon(R.drawable.logo_top);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		this.getSupportActionBar().setHomeButtonEnabled(true);
+		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		this.mSlideMenu = (SlideMenu) findViewById(R.id.slide_menu);
 		this.mMapView = (PolarisMapView) findViewById(R.id.polaris_map_view);
-		this.mMapView.getController().setZoom(12);
+		this.mMapView.getController().setZoom(17);
 		this.mMapView.setUserTrackingButtonEnabled(true);
 		this.mMapView.setOnRegionChangedListenerListener(this);
 		this.mMapView.setOnAnnotationSelectionChangedListener(this);
@@ -192,7 +193,11 @@ public class MainActivity extends SherlockMapActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		menu.add("").setIcon(R.drawable.ic_action_address)
+		menu.add(getString(R.string.label_ic_profile_bar))
+				.setIcon(R.drawable.ic_social_person).setNumericShortcut('2')
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		menu.add(getString(R.string.label_ic_address_bar))
+				.setIcon(R.drawable.ic_location_directions)
 				.setNumericShortcut('1')
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
@@ -208,7 +213,14 @@ public class MainActivity extends SherlockMapActivity implements
 			mSlideMenu.toggle();
 			break;
 
+		case '2':
+			Intent intentEditProfile = new Intent(getApplicationContext(),
+					EditProfileActivity.class);
+			startActivity(intentEditProfile);
+			break;
+
 		default:
+			mSlideMenu.toggle();
 			break;
 		}
 
@@ -251,11 +263,13 @@ public class MainActivity extends SherlockMapActivity implements
 			Log.i(LOG_TAG, "Coordenadas por el mapa - Longitud: "
 					+ this.mMapView.getMapCenter().getLongitudeE6());
 
-			GeoPoint altPoint = new GeoPoint(((int) (this.latitude * 1E6)),
-					((int) (this.longitude * 1E6)));
-
-			this.mMapView.getController().setCenter(altPoint);
-			this.mMapView.getController().animateTo(altPoint);
+			/*
+			 * GeoPoint altPoint = new GeoPoint(((int) (this.latitude * 1E6)),
+			 * ((int) (this.longitude * 1E6)));
+			 * 
+			 * this.mMapView.getController().setCenter(altPoint);
+			 * this.mMapView.getController().animateTo(altPoint);
+			 */
 
 		} catch (Exception e) {
 			// TODO: handle exception

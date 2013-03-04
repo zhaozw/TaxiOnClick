@@ -4,6 +4,12 @@
     <!-- url for register user mitaxiapp -->
     <string name="url_taxis"> http://186.28.255.229/bogota/wstaxcenter.asmx/</string>
 
+    <!-- url from localization actual taxi -->
+    <string name="url_service_request_position">http://taxisws.widetech.co/cab/wscab.asmx/</string>
+
+    <!-- method name request position taxi -->
+    <string name="method_name_request_position_taxi">GetPositionCABByServiceID</string>
+
     <!-- method name register user -->
     <string name="method_name_set_customer_record">SetCustomerRecord</string>
 
@@ -40,5 +46,11 @@
     <string name="parameter_user_get_service_mobile">strUser</string>
     <string name="parameter_pass_get_service_mobile">strPassword</string>
     <string name="parameter_id_get_service_mobile">ServiceID</string>
+
+    <!-- parameters request position taxi -->
+    <string name="parameter_user_request_position_taxi">strUser</string>
+    <string name="parameter_pass_request_position_taxi">strPassword</string>
+    <string name="parameter_custom_id_request_position_taxi">intCustomID</string>
+    <string name="parameter_service_id_request_position_taxi">intServiceID</string>
 
 </resources>

@@ -56,7 +56,7 @@ public class DataAccessUser implements DataAccess {
 				user.setPhone_text(mCursor.getString(0));
 				user.setName_text(mCursor.getString(1));
 				user.setLastname_text(mCursor.getString(2));
-				user.setEmail_text(mCursor.getString(2));
+				user.setEmail_text(mCursor.getString(3));
 			}
 		}
 		if (mCursor != null)

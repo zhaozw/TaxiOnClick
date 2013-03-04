@@ -27,6 +27,7 @@
         <item name="android:background">@drawable/actionbar_background</item>
         <item name="indeterminateProgressStyle">@style/IndeterminateProgress</item>
         <item name="android:indeterminateProgressStyle">@style/IndeterminateProgress</item>
+        <item name="android:divider">@style/Divider</item>
     </style>
 
     <style name="IndeterminateProgress" parent="@android:style/Widget.ProgressBar">

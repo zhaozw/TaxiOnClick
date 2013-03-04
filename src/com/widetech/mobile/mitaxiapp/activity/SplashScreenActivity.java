@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -49,8 +48,6 @@ public class SplashScreenActivity extends Activity {
 	 */
 	private SystemUiHider mSystemUiHider;
 
-	private Button mButtonAccess;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,8 +56,6 @@ public class SplashScreenActivity extends Activity {
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final View contentView = findViewById(R.id.fullscreen_content);
-
-		this.mButtonAccess = (Button) findViewById(R.id.dummy_button);
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
@@ -119,38 +114,8 @@ public class SplashScreenActivity extends Activity {
 			}
 		});
 
-		// Set up the user interaction to manually show or hide the system UI.
-		mButtonAccess.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-
-				try {
-					User user = FacadeUser.read();
-
-					if (user == null) {
-						Intent intentRegister = new Intent(
-								getApplicationContext(),
-								UserRegisterActivity.class);
-						startActivity(intentRegister);
-						finish();
-					} else {
-						Intent intentMain = new Intent(getApplicationContext(),
-								MainActivity.class);
-						startActivity(intentMain);
-						finish();
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-			}
-		});
-
-		// Upon interacting with UI controls, delay any scheduled hide()
-		// operations to prevent the jarring behavior of controls going away
-		// while interacting with the UI.
-		findViewById(R.id.dummy_button).setOnTouchListener(
-				mDelayHideTouchListener);
+		Handler sp = new Handler();
+		sp.postDelayed(new SplashHandler(), 2000);
 	}
 
 	@Override
@@ -193,5 +158,35 @@ public class SplashScreenActivity extends Activity {
 	private void delayedHide(int delayMillis) {
 		mHideHandler.removeCallbacks(mHideRunnable);
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
+	}
+
+	class SplashHandler implements Runnable {
+		public void run() {
+
+			try {
+				User user = FacadeUser.read();
+
+				if (user == null) {
+					Intent intentRegister = new Intent(getApplicationContext(),
+							UserRegisterActivity.class);
+					startActivity(intentRegister);
+					finish();
+					overridePendingTransition(
+							com.widetech.mobile.mitaxiapp.activity.R.anim.fadein,
+							com.widetech.mobile.mitaxiapp.activity.R.anim.fadeout);
+				} else {
+					Intent intentMain = new Intent(getApplicationContext(),
+							MainActivity.class);
+					startActivity(intentMain);
+					overridePendingTransition(
+							com.widetech.mobile.mitaxiapp.activity.R.anim.fadein,
+							com.widetech.mobile.mitaxiapp.activity.R.anim.fadeout);
+					finish();
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
 	}
 }

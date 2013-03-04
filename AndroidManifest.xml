@@ -55,6 +55,14 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_mobile_list" >
         </activity>
+        <activity
+            android:name="com.widetech.mobile.mitaxiapp.activity.PositionTaxiActivity"
+            android:label="@string/title_activity_position_taxi" >
+        </activity>
+        <activity
+            android:name="com.widetech.mobile.mitaxiapp.activity.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile" >
+        </activity>
     </application>
 
 </manifest>

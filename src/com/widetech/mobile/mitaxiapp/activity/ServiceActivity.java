@@ -20,6 +20,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -51,6 +53,8 @@ public class ServiceActivity extends SherlockActivity {
 
 	private boolean isNewAddress = false;
 
+	private static final int DEFAULT_PROGRESS_COUNTER_TAXIS = 1;
+
 	/**
 	 * Keep track of the service Taxi task to ensure we can cancel it if
 	 * requested.
@@ -81,6 +85,10 @@ public class ServiceActivity extends SherlockActivity {
 			this.mAddressForService = bundle.getString("address_service", "");
 		}
 
+		this.mBarCounterNumberTaxis.setProgress(DEFAULT_PROGRESS_COUNTER_TAXIS);
+		this.mEditTextTotalTaxis.setText(getString(R.string.label_total_taxis)
+				+ " " + Integer.toString(DEFAULT_PROGRESS_COUNTER_TAXIS));
+		this.mNumberOfTaxis = DEFAULT_PROGRESS_COUNTER_TAXIS;
 		this.mBarCounterNumberTaxis
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 					public void onProgressChanged(SeekBar seekBar,
@@ -264,6 +272,15 @@ public class ServiceActivity extends SherlockActivity {
 
 		} catch (Exception e) { // TODO: handle exception
 			e.printStackTrace();
+		}
+	}
+
+	public void restricOrientation() {
+		int current_orientation = getResources().getConfiguration().orientation;
+		if (current_orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		} else {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
 	}
 

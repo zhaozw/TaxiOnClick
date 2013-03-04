@@ -8,10 +8,8 @@ import org.apache.http.message.BasicNameValuePair;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.widetech.mobile.log.WidetechLogger;
 import com.widetech.mobile.mitaxiapp.activity.R;
-import com.widetech.mobile.mitaxiapp.facade.FacadeAddress;
 import com.widetech.mobile.mitaxiapp.facade.FacadeUser;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
-import com.widetech.mobile.mitaxiapp.object.Address;
 import com.widetech.mobile.mitaxiapp.object.User;
 import com.widetech.mobile.mitaxiapp.xml.XmlFetcherRegisterUser;
 import com.widetech.mobile.tools.GlobalConstants;
@@ -189,25 +187,15 @@ public class UserRegisterActivity extends SherlockActivity {
 			parameters.add(new BasicNameValuePair(
 					getString(R.string.parameter_email_address), mMail));
 
-			// Parameter Address user
-			parameters.add(new BasicNameValuePair(
-					getString(R.string.parameter_address),
-					GlobalConstants.ADDRESS_WILDCARD));
-
-			// Parameter sector user
-			parameters.add(new BasicNameValuePair(
-					getString(R.string.parameter_sector),
-					GlobalConstants.SECTOR_WILDCARD));
-
-			// Parameter note user
-			parameters.add(new BasicNameValuePair(
-					getString(R.string.parameter_note),
-					GlobalConstants.NOTE_WILDCARD));
-
 			// Parameter imei user
 			parameters.add(new BasicNameValuePair(
 					getString(R.string.parameter_imei), WideTechTools
 							.getImeiPhone(getApplicationContext())));
+
+			for (int i = 0; i < parameters.size(); i++) {
+				WidetechLogger.d("parametro: " + parameters.get(i).getName()
+						+ " valor: " + parameters.get(i).getValue());
+			}
 
 			// Create url from request register user
 			String urlRegister = new String(getString(R.string.url_taxis)
@@ -259,18 +247,9 @@ public class UserRegisterActivity extends SherlockActivity {
 					User user = new User(mPhone, mName, mName, mMail);
 					long stu = FacadeUser.create(user);
 
-					Address address = new Address("Calle 70 # 9-87",
-							GlobalConstants.SECTOR_WILDCARD,
-							GlobalConstants.NOTE_WILDCARD);
-
-					long sta = FacadeAddress.create(address);
-
 					boolean statusRecord = false;
 
 					if (stu != -1)
-						statusRecord = true;
-
-					if (sta != -1)
 						statusRecord = true;
 
 					if (statusRecord) {
@@ -278,11 +257,6 @@ public class UserRegisterActivity extends SherlockActivity {
 								MainActivity.class);
 						startActivity(intent);
 
-						Address addresso = new Address("Cra 117 89 A 25 ",
-								GlobalConstants.SECTOR_WILDCARD,
-								GlobalConstants.NOTE_WILDCARD);
-
-						FacadeAddress.create(addresso);
 						finish();
 					} else
 						Toast.makeText(getApplicationContext(),
