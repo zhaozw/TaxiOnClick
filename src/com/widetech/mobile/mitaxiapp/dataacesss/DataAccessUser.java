@@ -79,4 +79,16 @@ public class DataAccessUser implements DataAccess {
 		// TODO Auto-generated method stub
 
 	}
+
+	public void truncateTableUser() {
+		try {
+			this.database.open();
+			this.database.getDataBase().execSQL(
+					"DELETE FROM " + SQLConstants.TABLE_NAME_USER);
+			this.database.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }

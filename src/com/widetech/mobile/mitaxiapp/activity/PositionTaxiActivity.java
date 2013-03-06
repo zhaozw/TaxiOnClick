@@ -54,7 +54,7 @@ public class PositionTaxiActivity extends SherlockMapActivity implements
 		// Prepare an alternate pin Drawable
 		final Drawable altMarker = MapViewUtils
 				.boundMarkerCenterBottom(getResources().getDrawable(
-						R.drawable.map_pin_holed_blue_alt));
+						R.drawable.taxi_map));
 
 		// Prepare the list of Annotation using the alternate Drawable for all
 		// Annotation located in France

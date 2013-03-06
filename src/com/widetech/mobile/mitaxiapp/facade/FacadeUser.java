@@ -6,7 +6,6 @@ import com.widetech.mobile.mitaxiapp.dataacesss.Factory;
 import com.widetech.mobile.mitaxiapp.dataacesss.Factory.DAC;
 import com.widetech.mobile.mitaxiapp.object.User;
 
-
 public class FacadeUser {
 
 	protected static DataAccessUser DacUSer = (DataAccessUser) Factory
@@ -16,8 +15,12 @@ public class FacadeUser {
 	public static long create(User user) {
 		return DacUSer.create(user);
 	}
-	
+
 	public static User read() {
 		return DacUSer.read();
+	}
+
+	public static void truncateUser() {
+		DacUSer.truncateTableUser();
 	}
 }

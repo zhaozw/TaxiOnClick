@@ -77,6 +77,7 @@ public class RequestServer {
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				String paramString = URLEncodedUtils.format(params, "utf-8");
 				url += "?" + paramString;
+				System.out.println("la url de el request: " + url);
 				HttpGet httpGet = new HttpGet(url);
 
 				HttpResponse httpResponse = httpClient.execute(httpGet);

@@ -39,6 +39,8 @@
     <string name="title_dialog_add_new_address">Dirección nueva</string>
     <string name="message_dialog_add_new_address">Deseas agregar esta dirección a tus favoritas?</string>
     <string name="dialog_message_find_position_taxi">Ubicando el taxi&#8230;</string>
+    <string name="message_success_update_profile">Actualizacion de datos Correcta</string>
+    <string name="cannot_determinate_location">De momento no podemos determinar tu ubicación.</string>
 
     <!-- String from activity Service -->
     <string name="label_total_taxis">Total Taxis:</string>
@@ -63,8 +65,8 @@
     <string name="label_ic_address_bar">Direcciones</string>
     <string name="label_ic_profile_bar">Perfil</string>
     <string name="title_activity_edit_profile">Editar Perfil</string>
-    
-    <!--  String from tags icon actionbarsherlock edit profile -->
+
+    <!-- String from tags icon actionbarsherlock edit profile -->
     <string name="label_ic_save_profile">Guardar</string>
 
 </resources>
