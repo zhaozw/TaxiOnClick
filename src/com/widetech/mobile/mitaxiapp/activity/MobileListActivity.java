@@ -14,15 +14,19 @@ import com.widetech.mobile.mitaxiapp.facade.FacadeMobile;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
 import com.widetech.mobile.mitaxiapp.object.Mobile;
 import com.widetech.mobile.mitaxiapp.object.PositionMobile;
+import com.widetech.mobile.mitaxiapp.xml.XmlFetcherCancelTaxi;
 import com.widetech.mobile.mitaxiapp.xml.XmlFetcherPositionTaxi;
 import com.widetech.mobile.tools.ConnectionDetector;
 import com.widetech.mobile.tools.GlobalConstants;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,7 +37,8 @@ public class MobileListActivity extends SherlockListActivity {
 	private ArrayList<Mobile> mobilesFounded;
 	private MobilesAdapter adapter;
 	private QuickAction mQuickAction;
-	private ProgressDialog mProgressDialog;
+	private ProgressDialog mProgressDialogPositionTaxi;
+	private ProgressDialog mProgressDialogCancelTaxi;
 
 	// ID's items QuickAction
 	private static final int ID_CANCEL = 1;
@@ -45,32 +50,44 @@ public class MobileListActivity extends SherlockListActivity {
 	// id taxi from search actual position
 	private String mobileIdPosition = "";
 
+	// plate taxi by actual position
 	private String plateTaxi = "";
 
+	/**
+	 * Request to Position Taxi
+	 */
 	private PositionTaxiTask mPositionTask;
+
+	/**
+	 * Request to Cancel Taxi
+	 */
+	private CancelTaxiTask mCancelTaxiTask;
+
+	private boolean servicesInCourse = true;
+
+	private Mobile taxiToCancel = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mobile_list);
 
-		if (savedInstanceState == null) {
-			// get current id service
-			int id = ((Application) this.getApplication()).getId();
-			try {
-				mobilesFounded = FacadeMobile.readMobilesForServiceId(id);
+		int id = ((Application) this.getApplication()).getId();
+		try {
+			mobilesFounded = FacadeMobile.readMobilesForServiceId(id);
 
-				if (mobilesFounded != null) {
-					this.adapter = new MobilesAdapter(getApplicationContext(),
-							this.mobilesFounded);
-					this.setListAdapter(this.adapter);
-					this.getListView().setFocusable(true);
-					this.getListView().setSelection(mobilesFounded.size());
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
+			if (mobilesFounded != null) {
+				this.adapter = new MobilesAdapter(getApplicationContext(),
+						this.mobilesFounded);
+				this.setListAdapter(this.adapter);
+				this.getListView().setFocusable(true);
+				this.getListView().setSelection(mobilesFounded.size());
+			} else {
+				finish();
 			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
 
 		mQuickAction = new QuickAction(this);
@@ -105,9 +122,76 @@ public class MobileListActivity extends SherlockListActivity {
 							attemptPositionTaxi();
 						} else if (actionId == ID_CANCEL) {
 							// Cancel Service
+
+							taxiToCancel = (Mobile) adapter.getItem(selected);
+
+							// Cancel Taxi
+							attemptCancelService();
 						}
 					}
 				});
+	}
+
+	protected void attemptCancelService() {
+		// TODO Auto-generated method stub
+		if (this.mCancelTaxiTask != null)
+			return;
+
+		ConnectionDetector connection = new ConnectionDetector(
+				getApplicationContext());
+		if (!(connection.isConnectingToInternet())) {
+			Toast.makeText(this, getString(R.string.error_internet_connection),
+					Toast.LENGTH_LONG).show();
+			return;
+		} else {
+			questionCancelTaxi();
+		}
+
+	}
+
+	private void questionCancelTaxi() {
+		// TODO Auto-generated method stub
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.message_dialog_cancel_taxi)
+				.setTitle(R.string.title_dialog_cancel_taxi)
+				.setCancelable(false)
+				.setPositiveButton(R.string.label_button_dialog_ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+
+								cancelTaxi();
+								dialog.cancel();
+							}
+						})
+				.setNegativeButton(R.string.label_button_dialog_cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// User cancelled the dialog
+								dialog.cancel();
+							}
+						});
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+
+	}
+
+	protected void cancelTaxi() {
+		// TODO Auto-generated method stub
+
+		try {
+			this.restricOrientation();
+			this.mProgressDialogCancelTaxi = ProgressDialog.show(this, null,
+					getString(R.string.dialog_cancel_taxi), true, false);
+			this.mCancelTaxiTask = new CancelTaxiTask();
+			this.mCancelTaxiTask.execute((Void) null);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
 	}
 
 	protected void attemptPositionTaxi() {
@@ -127,7 +211,9 @@ public class MobileListActivity extends SherlockListActivity {
 		} else {
 
 			try {
-				this.mProgressDialog = ProgressDialog.show(this, null,
+				this.restricOrientation();
+				this.mProgressDialogPositionTaxi = ProgressDialog.show(this,
+						null,
 						getString(R.string.dialog_message_find_position_taxi),
 						true, false);
 				this.mPositionTask = new PositionTaxiTask();
@@ -169,7 +255,7 @@ public class MobileListActivity extends SherlockListActivity {
 			// Building Parameters
 			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-			// Add POST Parameters Register
+			// Add POST Parameters Position Taxi
 			// Parameter user request taxi
 			parameters.add(new BasicNameValuePair(
 					getString(R.string.parameter_user_request_position_taxi),
@@ -224,7 +310,7 @@ public class MobileListActivity extends SherlockListActivity {
 		}
 
 		protected void onPostExecute(final Boolean success) {
-			mProgressDialog.dismiss();
+			mProgressDialogPositionTaxi.dismiss();
 
 			if (success) {
 				Intent intentActualPositionTaxi = new Intent(
@@ -233,9 +319,15 @@ public class MobileListActivity extends SherlockListActivity {
 				intentActualPositionTaxi.putExtra("id_taxi", mobileIdPosition);
 				startActivity(intentActualPositionTaxi);
 			}
+
+			mPositionTask = null;
+			mProgressDialogPositionTaxi = null;
 		}
 
 		protected void onCancelled() {
+			mProgressDialogPositionTaxi.dismiss();
+			mPositionTask = null;
+			mProgressDialogPositionTaxi = null;
 		}
 	}
 
@@ -246,13 +338,102 @@ public class MobileListActivity extends SherlockListActivity {
 
 		protected Boolean doInBackground(Void... params) {
 			boolean status = true;
+
+			// Building Parameters
+			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+
+			// Add POST parameters cancel Taxi
+			parameters.add(new BasicNameValuePair(
+					getString(R.string.parameter_user_request_cancel_taxi),
+					GlobalConstants.USER_SERVICE));
+
+			parameters.add(new BasicNameValuePair(
+					getString(R.string.parameter_pass_request_cancel_taxi),
+					GlobalConstants.PASS_SERVICE));
+
+			parameters
+					.add(new BasicNameValuePair(
+							getString(R.string.parameter_service_id_request_cancel_taxi),
+							String.valueOf(taxiToCancel.getId_service())));
+
+			parameters
+					.add(new BasicNameValuePair(
+							getString(R.string.parameter_service_int_movil_request_cancel_taxi),
+							taxiToCancel.getMobile()));
+
+			parameters
+					.add(new BasicNameValuePair(
+							getString(R.string.parameter_service_date_request_cancel_taxi),
+							""));
+
+			for (int i = 0; i < parameters.size(); i++) {
+				WidetechLogger.d("parametro: " + parameters.get(i).getName()
+						+ " valor: " + parameters.get(i).getValue());
+			}
+
+			// Create url from cancel taxi
+			String urlCancelTaxi = new String(getString(R.string.url_taxis)
+					+ getString(R.string.method_name_cancel_service));
+
+			WidetechLogger.d("Url cancelacion de taxi: " + urlCancelTaxi);
+
+			String response = RequestServer.makeHttpRequest(urlCancelTaxi,
+					GlobalConstants.METHOD_POST, parameters);
+			WidetechLogger.d("resultado del stream: " + response);
+
+			if (response == null)
+				status = false;
+			else {
+				String statusResponse = new XmlFetcherCancelTaxi(response)
+						.getResultData();
+
+				if (TextUtils.isEmpty(statusResponse))
+					status = false;
+				else {
+					WidetechLogger.d("status de la cancelación del taxi: "
+							+ statusResponse);
+
+					if (!(GlobalConstants.SUCCESS_CANCEL
+							.contentEquals(statusResponse)))
+						status = false;
+				}
+			}
+
 			return status;
 		}
 
 		protected void onPostExecute(final Boolean success) {
+			mProgressDialogCancelTaxi.dismiss();
+
+			if (success) {
+
+				// Update the taxi
+				try {
+					WidetechLogger.d("la actualizacion del taxi: "
+							+ FacadeMobile.updateMobile(taxiToCancel));
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+
+			} else {
+
+			}
 		}
 
 		protected void onCancelled() {
+			mProgressDialogCancelTaxi.dismiss();
+			mProgressDialogCancelTaxi = null;
+			mCancelTaxiTask = null;
 		}
+	}
+
+	public void onBackPressed() {
+		if (servicesInCourse)
+			Toast.makeText(getApplicationContext(),
+					getString(R.string.non_close_services_in_course),
+					Toast.LENGTH_LONG).show();
+		else
+			super.onBackPressed();
 	}
 }

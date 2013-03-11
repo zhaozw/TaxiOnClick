@@ -83,6 +83,8 @@ public class ServiceActivity extends SherlockActivity {
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
 			this.mAddressForService = bundle.getString("address_service", "");
+			this.mNeighborhoodforService = bundle.getString(
+					"neighborhood_service", "");
 		}
 
 		this.mBarCounterNumberTaxis.setProgress(DEFAULT_PROGRESS_COUNTER_TAXIS);
@@ -111,6 +113,7 @@ public class ServiceActivity extends SherlockActivity {
 		this.mButtonObtainService.setOnClickListener(onClickButtonGoService);
 
 		this.mEditTextAddress.setText(mAddressForService);
+		this.mEditTextNeighborhood.setText(mNeighborhoodforService);
 
 		if (savedInstanceState == null) {
 			findDataForAddress();
@@ -264,7 +267,7 @@ public class ServiceActivity extends SherlockActivity {
 		// Realize call Service Taxis
 
 		try {
-
+			restricOrientation();
 			this.mProgressDialog = ProgressDialog.show(this, null,
 					getString(R.string.dialog_message_get_mobile), true, false);
 			this.mServiceTask = new SendServiceTask();

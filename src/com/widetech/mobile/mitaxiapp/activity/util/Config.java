@@ -75,8 +75,8 @@ public class Config {
 	//
 	// /////////////////////////////////////////////////////////////
 
-	private static final int COMPILATION_TARGET_RELEASE = 0;
-	private static final int COMPILATION_TARGET_DEBUG = 1;
+	private static final int COMPILATION_TARGET_RELEASE = 1;
+	private static final int COMPILATION_TARGET_DEBUG = 0;
 
 	/**
 	 * The current compilation target

@@ -30,4 +30,8 @@ public class FacadeMobile {
 	public static ArrayList<Mobile> readMobilesForServiceId(int serviceId) {
 		return DacMobile.readMobilesForIdService(serviceId);
 	}
+
+	public static long updateMobile(Mobile mobile) {
+		return DacMobile.update(mobile);
+	}
 }

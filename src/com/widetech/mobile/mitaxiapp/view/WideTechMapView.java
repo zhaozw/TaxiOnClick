@@ -8,16 +8,41 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import com.cyrilmottier.polaris.PolarisMapView;
 import com.cyrilmottier.polaris.R;
+import com.cyrilmottier.polaris.internal.OverlayContainer;
+import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 
 public class WideTechMapView extends PolarisMapView {
 
 	private boolean mIsUserTrackingButtonEnabled;
 	private ImageButton mUserTrackingButton;
+	private MyLocationOverlay mMyLocationOverlay;
+	private OverlayContainer mOverlayContainer;
 
 	public WideTechMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Method that MUST be called in the hosting {@link MapActivity} onStart()
+	 * method.
+	 */
+	public void onStart() {
+		if (mMyLocationOverlay != null) {
+			mMyLocationOverlay.enableMyLocation();
+		}
+	}
+
+	/**
+	 * Method that MUST be called in the hosting {@link MapActivity} onStop()
+	 * method.
+	 */
+	public void onStop() {
+		if (mMyLocationOverlay != null) {
+			mMyLocationOverlay.disableMyLocation();
+		}
 	}
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -62,8 +87,12 @@ public class WideTechMapView extends PolarisMapView {
 		return mIsUserTrackingButtonEnabled;
 	}
 
+	public MyLocationOverlay myOverlay() {
+		return this.mMyLocationOverlay;
+	}
+
 	public void setUserTrackingButtonEnabled(boolean enabled,
-			View.OnClickListener listener) {
+			OnClickListener listener) {
 		if (mIsUserTrackingButtonEnabled != enabled) {
 			mIsUserTrackingButtonEnabled = enabled;
 			if (enabled) {
@@ -84,11 +113,17 @@ public class WideTechMapView extends PolarisMapView {
 							);
 					// @formatter:on
 				}
+				mMyLocationOverlay = new MyLocationOverlay(getContext(), this);
+				mMyLocationOverlay.enableMyLocation();
+				mOverlayContainer.setUserLocationOverlay(mMyLocationOverlay);
 				addView(mUserTrackingButton);
 			} else {
 				if (mUserTrackingButton != null) {
 					removeView(mUserTrackingButton);
 				}
+				mOverlayContainer.setUserLocationOverlay(null);
+				mMyLocationOverlay.disableMyLocation();
+				mMyLocationOverlay = null;
 			}
 		}
 	}

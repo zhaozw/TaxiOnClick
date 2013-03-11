@@ -18,11 +18,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -45,14 +51,14 @@ import com.widetech.mobile.mitaxiapp.listener.ListenerLocation;
 import com.widetech.mobile.mitaxiapp.net.RequestGoogleMapsAPI;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
 import com.widetech.mobile.mitaxiapp.object.Address;
-import com.widetech.mobile.mitaxiapp.view.WideTechMapView;
+import com.widetech.mobile.tools.GlobalConstants;
 
 public class MainActivity extends SherlockMapActivity implements
 		OnRegionChangedListener, OnAnnotationSelectionChangedListener {
 
 	// UI References
 	private static final String LOG_TAG = "MainActivity";
-	private WideTechMapView mMapView;
+	private PolarisMapView mMapView;
 	private EditText mEditTextAddress;
 	private SlideMenu mSlideMenu;
 	private ListView mListAddress;
@@ -79,6 +85,9 @@ public class MainActivity extends SherlockMapActivity implements
 	 */
 	private FindAddressTask mRequestAddress = null;
 
+	// Connection Detector status network
+	private com.widetech.mobile.tools.ConnectionDetector cd;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,16 +98,6 @@ public class MainActivity extends SherlockMapActivity implements
 		this.getSupportActionBar().setHomeButtonEnabled(true);
 		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		this.mSlideMenu = (SlideMenu) findViewById(R.id.slide_menu);
-		this.mMapView = (WideTechMapView) findViewById(R.id.polaris_map_view);
-		this.mMapView.getController().setZoom(17);
-		// this.mMapView.setUserTrackingButtonEnabled(true);
-		this.mMapView.setOnRegionChangedListenerListener(this);
-		this.mMapView.setOnAnnotationSelectionChangedListener(this);
-
-		this.mEditTextAddress = (EditText) findViewById(R.id.editTextActualAddress);
-		this.mButtonGetTaxi = (Button) findViewById(R.id.button_get_taxi);
-		this.mMapView.setUserTrackingButtonEnabled(true, onClickFindPosition);
 		// Init GPS Listener and Listener Location
 		this.mLocationListener = new ListenerLocation(getApplicationContext());
 		this.mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -106,6 +105,18 @@ public class MainActivity extends SherlockMapActivity implements
 				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		this.mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				0, 0, this.mLocationListener);
+
+		this.mSlideMenu = (SlideMenu) findViewById(R.id.slide_menu);
+		this.mMapView = (PolarisMapView) findViewById(R.id.polaris_map_view);
+		this.mMapView.getController().setZoom(17);
+		// this.mMapView.setUserTrackingButtonEnabled(true);
+		this.mMapView.setUserTrackingButtonEnabled(true);
+		this.mMapView.setOnRegionChangedListenerListener(this);
+		this.mMapView.setOnAnnotationSelectionChangedListener(this);
+
+		this.mEditTextAddress = (EditText) findViewById(R.id.editTextActualAddress);
+		this.mEditTextAddress.setOnEditorActionListener(mWriteListener);
+		this.mButtonGetTaxi = (Button) findViewById(R.id.button_get_taxi);
 
 		try {
 			this.currentAddress = FacadeAddress.readAllAddress();
@@ -120,7 +131,6 @@ public class MainActivity extends SherlockMapActivity implements
 
 		this.mListAddress.setOnItemClickListener(onItemClickAddressListView);
 		this.mButtonGetTaxi.setOnClickListener(onClickButtonGetTaxi);
-
 		this.obtainLocation();
 	}
 
@@ -145,17 +155,43 @@ public class MainActivity extends SherlockMapActivity implements
 
 		public void onClick(View view) {
 			// TODO Auto-generated method stub
+			// Check if Internet present
+			cd = new com.widetech.mobile.tools.ConnectionDetector(
+					getApplicationContext());
+			if (!cd.isConnectingToInternet()) {
+				// Internet Connection is not present
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.error_internet_connection),
+						Toast.LENGTH_LONG).show();
+				// stop executing code by return
+				return;
+			}
 			attemptService();
 		}
 	};
 
-	/**
-	 * Click on Button Obtain Actual Position
-	 */
-	private final View.OnClickListener onClickFindPosition = new View.OnClickListener() {
+	private TextView.OnEditorActionListener mWriteListener = new TextView.OnEditorActionListener() {
+		public boolean onEditorAction(TextView view, int actionId,
+				KeyEvent event) {
+			String message = view.getText().toString();
 
-		public void onClick(View view) {
-			obtainLocation();
+			if (!message.equalsIgnoreCase("")) {
+				// Check if Internet present
+				cd = new com.widetech.mobile.tools.ConnectionDetector(
+						getApplicationContext());
+				if (!cd.isConnectingToInternet()) {
+					// Internet Connection is not present
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.error_internet_connection),
+							Toast.LENGTH_LONG).show();
+				} else {
+					attemptService();
+				}
+			}
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(mEditTextAddress.getWindowToken(), 0);
+
+			return true;
 		}
 	};
 
@@ -179,17 +215,19 @@ public class MainActivity extends SherlockMapActivity implements
 
 	@Override
 	public void onRegionChanged(PolarisMapView mapView) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onRegionChanged");
+
+		WidetechLogger.d("onRegionChanged");
+		boolean isPressed = mMapView.isPressedButtonTracking();
+		WidetechLogger.d("status del pressed: " + isPressed);
+		if (!(isPressed)) {
+			CenterLocation(this.mMapView.getMapCenter());
 		}
-		CenterLocation(this.mMapView.getMapCenter());
 	}
 
 	@Override
 	public void onRegionChangeConfirmed(PolarisMapView mapView) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onRegionChangeConfirmed");
-		}
+
+		WidetechLogger.d("onRegionChangeConfirmed");
 		CenterLocation(this.mMapView.getMapCenter());
 		WidetechLogger.d("Ultima latitud: "
 				+ this.mMapView.getMapCenter().getLatitudeE6() / 1E6);
@@ -200,20 +238,34 @@ public class MainActivity extends SherlockMapActivity implements
 		this.longitude = (this.mMapView.getMapCenter().getLongitudeE6() / 1E6);
 
 		requestAddressToMarker();
+		this.mMapView.setStatusPressedButton(false);
 	}
 
 	private void requestAddressToMarker() {
 		// TODO Auto-generated method stub
-		if (this.mRequestAddress != null)
+
+		// Check if Internet present
+		this.cd = new com.widetech.mobile.tools.ConnectionDetector(
+				getApplicationContext());
+		if (!this.cd.isConnectingToInternet()) {
+			// Internet Connection is not present
+			Toast.makeText(getApplicationContext(),
+					getString(R.string.error_internet_connection),
+					Toast.LENGTH_LONG).show();
+			// stop executing code by return
 			return;
+		} else {
+			if (this.mRequestAddress != null)
+				return;
 
-		try {
+			try {
 
-			this.mRequestAddress = new FindAddressTask();
-			this.mRequestAddress.execute((Void) null);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+				this.mRequestAddress = new FindAddressTask();
+				this.mRequestAddress.execute((Void) null);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -357,7 +409,6 @@ public class MainActivity extends SherlockMapActivity implements
 
 		// Reset Errors
 		this.mEditTextAddress.setError(null);
-
 		// Store values at the time of the service attempt.
 		this.mAddress = this.mEditTextAddress.getText().toString();
 
@@ -370,6 +421,21 @@ public class MainActivity extends SherlockMapActivity implements
 					.setError(getString(R.string.empty_error_field));
 			focusView = this.mEditTextAddress;
 			cancel = true;
+		} else if (address != null) {
+			String a = address.get(0).getAddressLine(0).split(",")[0]
+					.toString();
+			@SuppressWarnings("unused")
+			String c = address.get(5).getAddressLine(0).split(",")[0]
+					.toString();
+			if (this.mAddress.equalsIgnoreCase(a != null ? a : "")) {
+				displayMessage(getString(R.string.verify_address));
+				focusView = this.mEditTextAddress;
+				cancel = true;
+			}/*
+			 * else if (!(GlobalConstants.CITY_APP .equalsIgnoreCase(c != null ?
+			 * c : ""))) { displayMessage(getString(R.string.verify_city));
+			 * focusView = this.mEditTextAddress; cancel = true; }
+			 */
 		}
 
 		if (cancel) {
@@ -381,9 +447,32 @@ public class MainActivity extends SherlockMapActivity implements
 			Intent intentSolciteService = new Intent(getApplicationContext(),
 					ServiceActivity.class);
 			intentSolciteService.putExtra("address_service", mAddress);
+			String b = null;
+			if (address != null) {
+				b = address.get(2).getAddressLine(0).toString().split(",")[0]
+						.toString();
+			}
+			intentSolciteService.putExtra("neighborhood_service", b != null ? b
+					: "");
 			startActivity(intentSolciteService);
 
 		}
+	}
+
+	private void displayMessage(String message) {
+		// TODO Auto-generated method stub
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_layout_message,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		text.setText(message);
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
 	}
 
 	/**
@@ -407,7 +496,7 @@ public class MainActivity extends SherlockMapActivity implements
 			parameters.add(new BasicNameValuePair("sensor", "false"));
 
 			// Create url from request address
-			String urlGeocoder = "http://maps.googleapis.com/maps/api/geocode/json";
+			String urlGeocoder = GlobalConstants.URL_GOOGLE_API_MAPS;
 
 			for (int i = 0; i < parameters.size(); i++) {
 				WidetechLogger.d("parametro: " + parameters.get(i).getName()
@@ -487,6 +576,9 @@ public class MainActivity extends SherlockMapActivity implements
 			// create locations of interest
 			GeoPoint myPlace = new GeoPoint(LatitudeE6, LongitudeE6);
 			myOverlayItem = new OverlayItem(myPlace, "", "");
+			if (locations.size() != 0) {
+				locations.clear();
+			}
 			locations.add(myOverlayItem);
 
 			populate();
@@ -496,6 +588,10 @@ public class MainActivity extends SherlockMapActivity implements
 		protected OverlayItem createItem(int i) {
 			// TODO Auto-generated method stub
 			return locations.get(i);
+		}
+
+		public void removeItem(int i) {
+			locations.remove(i);
 		}
 
 		@Override
@@ -524,9 +620,29 @@ public class MainActivity extends SherlockMapActivity implements
 		Drawable marker = getResources().getDrawable(R.drawable.person_map);
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
 				marker.getIntrinsicHeight());
-		mMapView.getOverlays().clear();
-		mMapView.getOverlays().add(
-				new InterestingLocations(marker, markerLatitude,
-						markerLongitude));
+
+		String name = InterestingLocations.class.getSimpleName();
+
+		for (int i = 0; i < mMapView.getOverlays().size(); i++) {
+			String className = mMapView.getOverlays().get(i).getClass()
+					.getSimpleName();
+			if (className.equals(name)) {
+				InterestingLocations myOverlay = (InterestingLocations) mMapView
+						.getOverlays().get(i);
+
+				if ((myOverlay != null)) {
+					mMapView.getOverlays().remove(i);
+					mMapView.invalidate();
+					break;
+				}
+			}
+		}
+
+		ItemizedOverlay<OverlayItem> item = new InterestingLocations(marker,
+				markerLatitude, markerLongitude);
+
+		mMapView.getOverlays().add(item);
+		WidetechLogger.d("posicion marker: " + mMapView.getOverlays().size());
+		mMapView.invalidate();
 	}
 }

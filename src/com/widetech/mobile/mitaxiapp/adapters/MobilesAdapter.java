@@ -64,7 +64,7 @@ public class MobilesAdapter extends BaseAdapter {
 		TextView textTime = (TextView) vi.findViewById(R.id.timeMobile);
 
 		textDesc.setText("Placa: " + desc);
-		textTime.setText("Tiempo de arrivo: 5 minutos aprox");
+		textTime.setText("Tiempo de llegada: 5 minutos aprox");
 
 		return vi;
 	}

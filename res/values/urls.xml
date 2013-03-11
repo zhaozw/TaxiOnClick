@@ -19,6 +19,9 @@
     <!-- method name get mobile -->
     <string name="method_name_get_service_mobile">GetServiceMobile</string>
 
+    <!-- method name cancel taxi or service -->
+    <string name="method_name_cancel_service">CancelServiceByMobile</string>
+
     <!-- parameters register user -->
     <string name="parameter_user">strUser</string>
     <string name="parameter_password">strPassword</string>
@@ -52,5 +55,12 @@
     <string name="parameter_pass_request_position_taxi">strPassword</string>
     <string name="parameter_custom_id_request_position_taxi">intCustomID</string>
     <string name="parameter_service_id_request_position_taxi">intServiceID</string>
+
+    <!-- parameters request cancel taxi -->
+    <string name="parameter_user_request_cancel_taxi">strUser</string>
+    <string name="parameter_pass_request_cancel_taxi">strPassword</string>
+    <string name="parameter_service_id_request_cancel_taxi">ServiceID</string>
+    <string name="parameter_service_int_movil_request_cancel_taxi">intmovil</string>
+    <string name="parameter_service_date_request_cancel_taxi">dtmDateCancel</string>
 
 </resources>

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -17,7 +16,6 @@ public class AddressAdapter extends BaseAdapter {
 	private Context context;
 	private ArrayList<Address> address;
 	private static LayoutInflater inflater = null;
-	private int lastAnimatedPosition = -1;
 
 	public AddressAdapter(Context context, ArrayList<Address> address) {
 		// TODO Auto-generated constructor stub
@@ -59,18 +57,7 @@ public class AddressAdapter extends BaseAdapter {
 			vi = inflater.inflate(R.layout.address_item, null);
 
 		TextView textViewAddress = (TextView) vi.findViewById(R.id.AddressItem);
-
 		textViewAddress.setText(this.address.get(position).getAdreess());
-
-		if (position > lastAnimatedPosition) {
-			vi.setRotationX(80);
-			vi.setTranslationY(400);
-			vi.animate().rotationX(0).translationY(0).setDuration(600)
-					.setStartDelay(150)
-					.setInterpolator(new DecelerateInterpolator());
-			lastAnimatedPosition = position;
-		}
-
 		return vi;
 	}
 }

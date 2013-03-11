@@ -60,4 +60,16 @@ public class GlobalConstants {
 	// Request exitoso en el registro del usuario
 	public static final String SUCCESS_REGISTER = "OK";
 
+	// Request exitoso en la cancelación del taxi
+	public static final String SUCCESS_CANCEL = "OK";
+
+	public static final String CITY_APP = "Bogotá";
+
+	public static final String URL_GOOGLE_API_MAPS = "http://maps.googleapis.com/maps/api/geocode/json";
+
+	/* Status de los taxis (En camino, finalizado, cancelado) */
+	public static final int TAXI_IN_COURSE = 0;
+	public static final int TAXI_ARRIVED = 1;
+	public static final int TAXI_CANCELED = 2;
+
 }

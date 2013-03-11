@@ -122,6 +122,25 @@ public class DataAccessMobile implements DataAccess {
 		return (T) mobile;
 	}
 
+	public <T> long update(T obj) {
+		long status = 0;
+
+		Mobile mobile = (Mobile) obj;
+		this.database.open();
+		ContentValues valuesMobileUpdate = this.createContentValuesMobile(
+				mobile.getId_service(), mobile.getPlate(), mobile.getMobile(),
+				mobile.getId_position(), mobile.getStatus());
+
+		status = this.database.getDataBase().update(
+				SQLConstants.TABLE_NAME_MOBILE,
+				valuesMobileUpdate,
+				SQLConstants.MOBILE_ID_SERVICE + "=" + mobile.getId_service()
+						+ " AND " + SQLConstants.MOBILE_NUMBER_PLATE + "="
+						+ mobile.getPlate(), null);
+		this.database.close();
+		return status;
+	}
+
 	public ArrayList<Mobile> readMobilesForIdService(int id) {
 		ArrayList<Mobile> services = new ArrayList<Mobile>();
 

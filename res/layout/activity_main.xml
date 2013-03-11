@@ -13,11 +13,11 @@
         android:layout_height="match_parent"
         android:background="#80000000" >
 
-        <com.widetech.mobile.mitaxiapp.view.WideTechMapView
+        <com.cyrilmottier.polaris.PolarisMapView
             android:id="@+id/polaris_map_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:apiKey="0xy_mDiBNwQTzRHijlUzglUM9WySusLdoGB9roQ" />
+            android:apiKey="@string/android_key_maps_debug" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.00"
                 android:hint="@string/hint_actual_address_edittext"
+                android:inputType="textPersonName"
                 android:textColor="#ffd90e"
                 android:textColorHint="#ffd90e" >
 
