@@ -99,16 +99,18 @@
                 android:textStyle="normal" />
         </com.actionbarsherlock.internal.widget.IcsLinearLayout>
 
-        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
-
-            <Button
-                android:id="@+id/register"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_button_register"
-                android:textColor="#000000"
-                android:textStyle="normal" />
-        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+        <Button
+            android:id="@+id/register"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25.0dip"
+            android:layout_marginLeft="20.0dip"
+            android:layout_marginRight="15.0dip"
+            android:layout_marginTop="30.0dip"
+            android:background="@drawable/mitax_button"
+            android:text="@string/label_button_register"
+            android:textColor="#000000"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </ScrollView>

@@ -136,7 +136,7 @@ public class DataAccessMobile implements DataAccess {
 				valuesMobileUpdate,
 				SQLConstants.MOBILE_ID_SERVICE + "=" + mobile.getId_service()
 						+ " AND " + SQLConstants.MOBILE_NUMBER_PLATE + "="
-						+ mobile.getPlate(), null);
+						+ "'" + mobile.getPlate() + "'", null);
 		this.database.close();
 		return status;
 	}

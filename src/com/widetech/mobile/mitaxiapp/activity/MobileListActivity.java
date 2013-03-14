@@ -35,6 +35,7 @@ public class MobileListActivity extends SherlockListActivity {
 
 	// Update UI References
 	private ArrayList<Mobile> mobilesFounded;
+	private ArrayList<Mobile> mobilesInCourse;
 	private MobilesAdapter adapter;
 	private QuickAction mQuickAction;
 	private ProgressDialog mProgressDialogPositionTaxi;
@@ -43,6 +44,7 @@ public class MobileListActivity extends SherlockListActivity {
 	// ID's items QuickAction
 	private static final int ID_CANCEL = 1;
 	private static final int ID_MAP = 2;
+	private static final int ID_ARRIVED_TAXI = 3;
 
 	// Item list Taxis selected
 	private int selected = -1;
@@ -67,40 +69,33 @@ public class MobileListActivity extends SherlockListActivity {
 
 	private Mobile taxiToCancel = null;
 
+	private int idService = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mobile_list);
 
-		int id = ((Application) this.getApplication()).getId();
-		try {
-			mobilesFounded = FacadeMobile.readMobilesForServiceId(id);
+		idService = ((Application) this.getApplication()).getId();
 
-			if (mobilesFounded != null) {
-				this.adapter = new MobilesAdapter(getApplicationContext(),
-						this.mobilesFounded);
-				this.setListAdapter(this.adapter);
-				this.getListView().setFocusable(true);
-				this.getListView().setSelection(mobilesFounded.size());
-			} else {
-				finish();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+		refreshListTaxisInCourse();
 
 		mQuickAction = new QuickAction(this);
 
 		ActionItem cancelItem = new ActionItem(ID_CANCEL,
 				getString(R.string.label_quick_action_cancel_mobile),
-				getResources().getDrawable(R.drawable.ic_cancel_taxi));
+				getResources().getDrawable(R.drawable.boton_cancel));
 		ActionItem mapItem = new ActionItem(ID_MAP,
 				getString(R.string.label_quick_action_view_positon_mobile),
-				getResources().getDrawable(R.drawable.ic_position_mobile));
+				getResources().getDrawable(R.drawable.boton_locate));
+
+		ActionItem arrivedTaxi = new ActionItem(ID_ARRIVED_TAXI,
+				getString(R.string.label_quick_action_arrived_taxi),
+				getResources().getDrawable(R.drawable.boton_ok));
 
 		mQuickAction.addActionItem(cancelItem);
 		mQuickAction.addActionItem(mapItem);
+		mQuickAction.addActionItem(arrivedTaxi);
 
 		// setup the action item click listener
 		mQuickAction
@@ -124,12 +119,28 @@ public class MobileListActivity extends SherlockListActivity {
 							// Cancel Service
 
 							taxiToCancel = (Mobile) adapter.getItem(selected);
-
 							// Cancel Taxi
 							attemptCancelService();
+
+						} else if (actionId == ID_ARRIVED_TAXI) {
+							taxiToCancel = (Mobile) adapter.getItem(selected);
+							attemptArrivedService();
 						}
 					}
 				});
+	}
+
+	protected void attemptArrivedService() {
+		// TODO Auto-generated method stub
+
+		taxiToCancel.setStatus(1);
+		try {
+			FacadeMobile.updateMobile(taxiToCancel);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		refreshListTaxisInCourse();
 	}
 
 	protected void attemptCancelService() {
@@ -318,6 +329,10 @@ public class MobileListActivity extends SherlockListActivity {
 				intentActualPositionTaxi.putExtra("taxi_plate", plateTaxi);
 				intentActualPositionTaxi.putExtra("id_taxi", mobileIdPosition);
 				startActivity(intentActualPositionTaxi);
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.message_error_location_taxi),
+						Toast.LENGTH_LONG).show();
 			}
 
 			mPositionTask = null;
@@ -409,15 +424,19 @@ public class MobileListActivity extends SherlockListActivity {
 
 				// Update the taxi
 				try {
+					taxiToCancel.setStatus(2);
 					WidetechLogger.d("la actualizacion del taxi: "
 							+ FacadeMobile.updateMobile(taxiToCancel));
+					refreshListTaxisInCourse();
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
 
 			} else {
-
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.message_error_cancel_taxi),
+						Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -435,5 +454,41 @@ public class MobileListActivity extends SherlockListActivity {
 					Toast.LENGTH_LONG).show();
 		else
 			super.onBackPressed();
+	}
+
+	public void refreshListTaxisInCourse() {
+		// TODO Auto-generated method stub
+		mobilesInCourse = new ArrayList<Mobile>();
+		try {
+			mobilesFounded = FacadeMobile.readMobilesForServiceId(idService);
+
+			if (mobilesFounded != null) {
+
+				for (int i = 0; i < mobilesFounded.size(); i++) {
+
+					if (mobilesFounded.get(i).getStatus() == 0) {
+						Mobile m = mobilesFounded.get(i);
+						mobilesInCourse.add(m);
+					}
+				}
+
+				if (mobilesInCourse.size() != 0) {
+					this.adapter = new MobilesAdapter(getApplicationContext(),
+							this.mobilesFounded);
+					this.setListAdapter(this.adapter);
+					this.getListView().setFocusable(true);
+					this.getListView().setSelection(mobilesFounded.size());
+				} else {
+					servicesInCourse = false;
+					finish();
+				}
+			} else {
+				finish();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
 	}
 }

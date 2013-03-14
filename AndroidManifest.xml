@@ -35,17 +35,20 @@
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.AndroidDevelopers" >
         </activity>
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.UserRegisterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_user_register" >
+            android:label="@string/title_activity_user_register"
+            android:theme="@style/Theme.AndroidDevelopers" >
         </activity>
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.ServiceActivity"
             android:label="@string/title_activity_service"
-            android:parentActivityName="com.actionbarsherlock.app.SherlockActivity" >
+            android:parentActivityName="com.actionbarsherlock.app.SherlockActivity"
+            android:theme="@style/Theme.AndroidDevelopers" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.actionbarsherlock.app.SherlockActivity" />
@@ -53,15 +56,23 @@
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.MobileListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_mobile_list" >
+            android:label="@string/title_activity_mobile_list"
+            android:theme="@style/Theme.AndroidDevelopers" >
         </activity>
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.PositionTaxiActivity"
-            android:label="@string/title_activity_position_taxi" >
+            android:label="@string/title_activity_position_taxi"
+            android:theme="@style/Theme.AndroidDevelopers" >
         </activity>
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.EditProfileActivity"
-            android:label="@string/title_activity_edit_profile" >
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/Theme.AndroidDevelopers" >
+        </activity>
+        <activity
+            android:name="com.widetech.mobile.mitaxiapp.activity.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:theme="@style/Theme.AndroidDevelopers" >
         </activity>
     </application>
 

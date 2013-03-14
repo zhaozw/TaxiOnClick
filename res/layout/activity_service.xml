@@ -16,61 +16,153 @@
             android:max="5"
             android:progressDrawable="@drawable/seekbar_progress" />
 
-        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+        <TextView
+            style="@style/ListView.ItemText.Title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10.0dip"
+            android:text="@string/title_table_data_service" />
 
-            <EditText
-                android:id="@+id/totalTaxis"
-                style="@style/ListView.Edit"
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="0"
+            android:stretchColumns="1" >
+
+            <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/label_total_taxis"
-                android:inputType="textEmailAddress"
-                android:textStyle="normal" />
-        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+                android:background="@drawable/list_item_first"
+                android:minHeight="@dimen/min_list_item_height_with_padding"
+                android:orientation="horizontal" >
 
-        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+                <TextView
+                    style="@style/ListView.ItemText"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:hint="@string/label_total_taxis"
+                    android:paddingLeft="@dimen/whitespace"
+                    android:paddingRight="0.0dip"
+                    android:singleLine="true"
+                    android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/address"
-                style="@style/ListView.Edit"
+                <EditText
+                    android:id="@+id/totalTaxis"
+                    style="@style/ListView.Edit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.0"
+                    android:hint="@string/label_total_taxis"
+                    android:inputType="textCapWords"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow style="@style/Divider" />
+
+            <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/label_address_service"
-                android:inputType="textMultiLine"
-                android:textStyle="normal" />
-        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+                android:background="@drawable/list_item_middle"
+                android:minHeight="@dimen/min_list_item_height"
+                android:orientation="horizontal" >
 
-        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+                <TextView
+                    style="@style/ListView.ItemText"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:paddingLeft="@dimen/whitespace"
+                    android:paddingRight="0.0dip"
+                    android:singleLine="true"
+                    android:text="@string/label_address_service"
+                    android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/neighborhood"
-                style="@style/ListView.Edit"
+                <EditText
+                    android:id="@+id/address"
+                    style="@style/ListView.Edit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.0"
+                    android:hint="@string/label_neighborhood_service"
+                    android:inputType="textCapWords"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow style="@style/Divider" />
+
+            <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/label_neighborhood_service"
-                android:inputType="textMultiLine"
-                android:textStyle="normal" />
-        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+                android:background="@drawable/list_item_middle"
+                android:minHeight="@dimen/min_list_item_height"
+                android:orientation="horizontal" >
 
-        <com.actionbarsherlock.internal.widget.IcsLinearLayout style="@style/ListView.FakedContainer" >
+                <TextView
+                    style="@style/ListView.ItemText"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:paddingLeft="@dimen/whitespace"
+                    android:paddingRight="0.0dip"
+                    android:singleLine="true"
+                    android:text="@string/label_neighborhood_service"
+                    android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/point"
-                style="@style/ListView.Edit"
+                <EditText
+                    android:id="@+id/neighborhood"
+                    style="@style/ListView.Edit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.0"
+                    android:hint="@string/label_neighborhood_service"
+                    android:inputType="textCapWords"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow style="@style/Divider" />
+
+            <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/label_point_service"
-                android:inputType="textMultiLine"
-                android:textStyle="normal" />
-        </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+                android:background="@drawable/list_item_last"
+                android:minHeight="@dimen/min_list_item_height_with_padding" >
+
+                <TextView
+                    style="@style/ListView.ItemText"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:paddingLeft="@dimen/whitespace"
+                    android:paddingRight="0.0dip"
+                    android:singleLine="true"
+                    android:text="@string/label_point_service"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/point"
+                    style="@style/ListView.Edit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.0"
+                    android:hint="@string/label_point_service"
+                    android:inputType="textCapWords"
+                    android:textStyle="normal" />
+            </TableRow>
+        </TableLayout>
 
         <Button
             android:id="@+id/send_info_service"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="25.0dip"
+            android:layout_marginLeft="20.0dip"
+            android:layout_marginRight="15.0dip"
+            android:layout_marginTop="30.0dip"
+            android:background="@drawable/mitax_button"
             android:text="@string/label_accept_service"
             android:textColor="#000000"
-            android:textStyle="normal" />
+            android:textStyle="bold" />
     </LinearLayout>
 
 </ScrollView>

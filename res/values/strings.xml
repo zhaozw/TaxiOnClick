@@ -47,29 +47,34 @@
     <string name="title_dialog_cancel_taxi">Cancelar Taxi</string>
     <string name="message_dialog_cancel_taxi">Está seguro de cancelar este taxi?</string>
     <string name="dialog_cancel_taxi">Cancelando Taxi&#8230;</string>
+    <string name="message_error_cancel_taxi">No pudimos cancelar tu taxi. Algo pasó, intenta más tarde.</string>
+    <string name="message_error_location_taxi">De momento no podemos localizar tu taxi.</string>
 
     <!-- String from activity Service -->
-    <string name="label_total_taxis">Total Taxis:</string>
+    <string name="label_total_taxis">Taxis:</string>
     <string name="label_address_service">Direccion</string>
     <string name="label_neighborhood_service">Barrio</string>
-    <string name="label_point_service">Punto de Referencia</string>
+    <string name="label_point_service">Nota</string>
     <string name="label_accept_service">Aceptar</string>
     <string name="title_activity_mobile_list">Taxis En Curso</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_table_data_service">Datos del servicio</string>
 
     <!-- String from buttons dialog -->
     <string name="label_button_dialog_ok">Si</string>
     <string name="label_button_dialog_cancel">No</string>
 
     <!-- String from buttons QuickActions Mobile -->
-    <string name="label_quick_action_cancel_mobile">Cancelar servicio</string>
-    <string name="label_quick_action_view_positon_mobile">Posicion taxi</string>
+    <string name="label_quick_action_cancel_mobile">Cancelar</string>
+    <string name="label_quick_action_view_positon_mobile">Posición</string>
+    <string name="label_quick_action_arrived_taxi">Llegó!</string>
     <string name="title_activity_position_taxi">Ubicacion actual del taxi</string>
 
     <!-- String from tags icon actionbarsherlock main -->
     <string name="label_ic_address_bar">Direcciones</string>
     <string name="label_ic_profile_bar">Perfil</string>
+    <string name="label_ic_about_bar">Acerca de mitaxi</string>
     <string name="title_activity_edit_profile">Editar Perfil</string>
 
     <!-- String from tags icon actionbarsherlock edit profile -->
@@ -78,5 +83,6 @@
     <!-- String from key Google Maps API -->
     <string name="android_key_maps_production">0zgjA_4Wt8t3V8xEz4qei54Vlcw2Rwpadd22kpg</string>
     <string name="android_key_maps_debug">0xy_mDiBNwQTzRHijlUzglUM9WySusLdoGB9roQ</string>
+    <string name="title_activity_about">Acerda de mitaxi</string>
 
 </resources>

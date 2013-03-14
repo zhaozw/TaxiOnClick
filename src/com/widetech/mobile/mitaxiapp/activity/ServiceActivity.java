@@ -77,8 +77,7 @@ public class ServiceActivity extends SherlockActivity {
 		this.mButtonObtainService = (Button) findViewById(R.id.send_info_service);
 
 		this.mEditTextTotalTaxis.setEnabled(false);
-		this.mEditTextTotalTaxis.setText(getString(R.string.label_total_taxis)
-				+ " " + "0");
+		this.mEditTextTotalTaxis.setText("0");
 		this.mEditTextAddress.setEnabled(false);
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
@@ -88,16 +87,14 @@ public class ServiceActivity extends SherlockActivity {
 		}
 
 		this.mBarCounterNumberTaxis.setProgress(DEFAULT_PROGRESS_COUNTER_TAXIS);
-		this.mEditTextTotalTaxis.setText(getString(R.string.label_total_taxis)
-				+ " " + Integer.toString(DEFAULT_PROGRESS_COUNTER_TAXIS));
+		this.mEditTextTotalTaxis.setText(Integer.toString(DEFAULT_PROGRESS_COUNTER_TAXIS));
 		this.mNumberOfTaxis = DEFAULT_PROGRESS_COUNTER_TAXIS;
 		this.mBarCounterNumberTaxis
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 					public void onProgressChanged(SeekBar seekBar,
 							int progress, boolean fromUser) {
 						mEditTextTotalTaxis
-								.setText(getString(R.string.label_total_taxis)
-										+ " " + Integer.toString(progress));
+								.setText(Integer.toString(progress));
 						mNumberOfTaxis = progress;
 						WidetechLogger.d("Total de Taxis en : "
 								+ mNumberOfTaxis);
@@ -490,6 +487,7 @@ public class ServiceActivity extends SherlockActivity {
 				Intent intentShowMobiles = new Intent(getApplicationContext(),
 						MobileListActivity.class);
 				startActivity(intentShowMobiles);
+				finish();
 
 			} else {
 				Toast.makeText(getApplicationContext(),

@@ -35,4 +35,22 @@
         <item name="android:minWidth">16dp</item>
     </style>
 
+    <style name="MyTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#ffffff</item>
+    </style>
+
+    <style name="Theme.AndroidDevelopers" parent="Theme.Sherlock.Light">
+        <item name="actionBarStyle">@style/MyActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>
+    </style>
+
+    <style name="MyActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_taxi</item>
+        <item name="background">@drawable/ab_taxi</item>
+    </style>
+
 </resources>

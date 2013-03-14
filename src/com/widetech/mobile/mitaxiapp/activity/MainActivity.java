@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.cyrilmottier.polaris.Annotation;
 import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.PolarisMapView;
@@ -304,37 +305,49 @@ public class MainActivity extends SherlockMapActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		menu.add(getString(R.string.label_ic_profile_bar))
-				.setIcon(R.drawable.ic_social_person).setNumericShortcut('2')
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		menu.add(getString(R.string.label_ic_address_bar))
-				.setIcon(R.drawable.ic_location_directions)
-				.setNumericShortcut('1')
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		SubMenu sub = menu
+				.addSubMenu("")
+				.setIcon(
+						com.actionbarsherlock.R.drawable.abs__ic_menu_moreoverflow_holo_light);
+		sub.add(0, com.actionbarsherlock.R.style.Theme_Sherlock_Light, 1,
+				getString(R.string.label_ic_profile_bar));
+		sub.add(0, com.actionbarsherlock.R.style.Theme_Sherlock_Light, 2,
+				getString(R.string.label_ic_address_bar));
+		sub.add(0, com.actionbarsherlock.R.style.Theme_Sherlock_Light, 3,
+				getString(R.string.label_ic_about_bar));
+		sub.getItem().setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_ALWAYS
+						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		char number = item.getNumericShortcut();
+		int op = item.getOrder();
+		int id = item.getItemId();
 
-		switch (number) {
-		case '1':
-			mSlideMenu.toggle();
-			break;
-
-		case '2':
-			Intent intentEditProfile = new Intent(getApplicationContext(),
+		switch (op) {
+		case 1:
+			Intent intentProfile = new Intent(getApplicationContext(),
 					EditProfileActivity.class);
-			startActivity(intentEditProfile);
+			startActivity(intentProfile);
 			break;
-
-		default:
+		case 2:
 			mSlideMenu.toggle();
+			break;
+		default:
 			break;
 		}
 
+		switch (id) {
+		case android.R.id.home:
+			mSlideMenu.toggle();
+			break;
+
+		default:
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -384,8 +397,9 @@ public class MainActivity extends SherlockMapActivity implements
 
 			WidetechLogger.d("latitud inicial: " + intlat);
 			WidetechLogger.d("longitud inicial: " + intlon);
-			GeoPoint point = new GeoPoint((int) (latitude * 1E6),
-					(int) (longitude * 1E6));
+			GeoPoint point = new GeoPoint(this.mMapView.getMapCenter()
+					.getLatitudeE6(), this.mMapView.getMapCenter()
+					.getLongitudeE6());
 			this.mMapView.getController().setCenter(point);
 			CenterLocation(point);
 
@@ -422,20 +436,28 @@ public class MainActivity extends SherlockMapActivity implements
 			focusView = this.mEditTextAddress;
 			cancel = true;
 		} else if (address != null) {
-			String a = address.get(0).getAddressLine(0).split(",")[0]
-					.toString();
-			@SuppressWarnings("unused")
-			String c = address.get(5).getAddressLine(0).split(",")[0]
-					.toString();
-			if (this.mAddress.equalsIgnoreCase(a != null ? a : "")) {
-				displayMessage(getString(R.string.verify_address));
-				focusView = this.mEditTextAddress;
-				cancel = true;
-			}/*
-			 * else if (!(GlobalConstants.CITY_APP .equalsIgnoreCase(c != null ?
-			 * c : ""))) { displayMessage(getString(R.string.verify_city));
-			 * focusView = this.mEditTextAddress; cancel = true; }
-			 */
+			try {
+
+				String a = address.get(0).getAddressLine(0).split(",")[0]
+						.toString();
+				@SuppressWarnings("unused")
+				String c = address.get(5).getAddressLine(0).split(",")[0]
+						.toString();
+				if (this.mAddress.equalsIgnoreCase(a != null ? a : "")) {
+					displayMessage(getString(R.string.verify_address));
+					focusView = this.mEditTextAddress;
+					cancel = true;
+				}/*
+				 * else if (!(GlobalConstants.CITY_APP .equalsIgnoreCase(c !=
+				 * null ? c : ""))) {
+				 * displayMessage(getString(R.string.verify_city)); focusView =
+				 * this.mEditTextAddress; cancel = true; }
+				 */
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		}
 
 		if (cancel) {
