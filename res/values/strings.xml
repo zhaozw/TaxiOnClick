@@ -83,6 +83,11 @@
     <!-- String from key Google Maps API -->
     <string name="android_key_maps_production">0zgjA_4Wt8t3V8xEz4qei54Vlcw2Rwpadd22kpg</string>
     <string name="android_key_maps_debug">0xy_mDiBNwQTzRHijlUzglUM9WySusLdoGB9roQ</string>
+
+    <!-- String from About App -->
     <string name="title_activity_about">Acerda de mitaxi</string>
+    <string name="copyright">© Copyright - Taxi Finder</string>
+    <string name="used_terms">Términos de uso</string>
+    <string name="link_to_web_license">http://www.mitaxiapp.co/disclaimer.htm</string>
 
 </resources>

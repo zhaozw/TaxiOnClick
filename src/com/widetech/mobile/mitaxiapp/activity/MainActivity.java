@@ -25,8 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +64,7 @@ public class MainActivity extends SherlockMapActivity implements
 	private SlideMenu mSlideMenu;
 	private ListView mListAddress;
 	private AddressAdapter mAddressAdapter;
-	private Button mButtonGetTaxi;
+	private ImageButton mButtonGetTaxi;
 
 	private String mAddress;
 
@@ -117,7 +117,7 @@ public class MainActivity extends SherlockMapActivity implements
 
 		this.mEditTextAddress = (EditText) findViewById(R.id.editTextActualAddress);
 		this.mEditTextAddress.setOnEditorActionListener(mWriteListener);
-		this.mButtonGetTaxi = (Button) findViewById(R.id.button_get_taxi);
+		this.mButtonGetTaxi = (ImageButton) findViewById(R.id.button_get_taxi);
 
 		try {
 			this.currentAddress = FacadeAddress.readAllAddress();
@@ -335,6 +335,11 @@ public class MainActivity extends SherlockMapActivity implements
 			break;
 		case 2:
 			mSlideMenu.toggle();
+			break;
+		case 3:
+			Intent intentAbout = new Intent(getApplicationContext(),
+					AboutActivity.class);
+			startActivity(intentAbout);
 			break;
 		default:
 			break;
