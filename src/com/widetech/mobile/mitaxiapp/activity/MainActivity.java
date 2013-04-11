@@ -2,6 +2,7 @@ package com.widetech.mobile.mitaxiapp.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.simonvt.menudrawer.MenuDrawer;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -18,13 +19,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -45,14 +46,11 @@ import com.google.android.maps.OverlayItem;
 import com.widetech.mobile.log.WidetechLogger;
 import com.widetech.mobile.mitaxiapp.activity.R;
 import com.widetech.mobile.mitaxiapp.activity.util.Config;
-import com.widetech.mobile.mitaxiapp.adapters.AddressAdapter;
-import com.widetech.mobile.mitaxiapp.components.ui.widgets.SlideMenu;
-import com.widetech.mobile.mitaxiapp.facade.FacadeAddress;
 import com.widetech.mobile.mitaxiapp.listener.ListenerLocation;
 import com.widetech.mobile.mitaxiapp.net.RequestGoogleMapsAPI;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
-import com.widetech.mobile.mitaxiapp.object.Address;
 import com.widetech.mobile.tools.GlobalConstants;
+import com.widetech.mobile.tools.WideTechTools;
 
 public class MainActivity extends SherlockMapActivity implements
 		OnRegionChangedListener, OnAnnotationSelectionChangedListener {
@@ -61,10 +59,20 @@ public class MainActivity extends SherlockMapActivity implements
 	private static final String LOG_TAG = "MainActivity";
 	private PolarisMapView mMapView;
 	private EditText mEditTextAddress;
-	private SlideMenu mSlideMenu;
-	private ListView mListAddress;
-	private AddressAdapter mAddressAdapter;
 	private ImageButton mButtonGetTaxi;
+
+	private static final String STATE_ACTIVE_POSITION = "net.simonvt.menudrawer.samples.ContentSample.activePosition";
+	private static final String STATE_CONTENT_TEXT = "net.simonvt.menudrawer.samples.ContentSample.contentText";
+
+	private static final int CODE_FAVORITE_ADDRESS = 0;
+
+	private MenuDrawer mMenuDrawer;
+
+	private MenuAdapter mAdapter;
+	private ListView mList;
+
+	private int mActivePosition = -1;
+	private String mContentText;
 
 	private String mAddress;
 
@@ -78,7 +86,6 @@ public class MainActivity extends SherlockMapActivity implements
 	private double latitude = 0;
 	private double longitude = 0;
 
-	private ArrayList<Address> currentAddress;
 	static List<android.location.Address> address;
 
 	/**
@@ -93,11 +100,50 @@ public class MainActivity extends SherlockMapActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main);
+		if (savedInstanceState != null) {
+			mActivePosition = savedInstanceState.getInt(STATE_ACTIVE_POSITION);
+			mContentText = savedInstanceState.getString(STATE_CONTENT_TEXT);
+		}
+
+		mMenuDrawer = MenuDrawer.attach(this, MenuDrawer.MENU_DRAG_CONTENT);
+		mMenuDrawer.setContentView(R.layout.activity_main);
 		getSupportActionBar().setIcon(R.drawable.logo_top);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		this.getSupportActionBar().setHomeButtonEnabled(true);
 		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		List<Object> items = new ArrayList<Object>();
+		items.add(new Category(getString(R.string.label_ic_options_bar)));
+		items.add(new Item(getString(R.string.label_ic_profile_bar),
+				R.drawable.ic_social_person));
+		items.add(new Item(getString(R.string.label_ic_address_bar),
+				R.drawable.ic_favorite_address));
+		items.add(new Item(getString(R.string.label_ic_history_bar),
+				R.drawable.ic_history_service));
+		/*
+		 * items.add(new Item(getString(R.string.label_ic_help_bar),
+		 * R.drawable.ic_action_help));
+		 */
+		items.add(new Item(getString(R.string.label_ic_about_bar),
+				R.drawable.ic_action_about));
+
+		mList = new ListView(this);
+		mAdapter = new MenuAdapter(items);
+		mList.setAdapter(mAdapter);
+		mList.setOnItemClickListener(mItemClickListener);
+		mList.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				mMenuDrawer.invalidate();
+			}
+		});
+
+		mMenuDrawer.setMenuView(mList);
 
 		// Init GPS Listener and Listener Location
 		this.mLocationListener = new ListenerLocation(getApplicationContext());
@@ -106,11 +152,8 @@ public class MainActivity extends SherlockMapActivity implements
 				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		this.mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				0, 0, this.mLocationListener);
-
-		this.mSlideMenu = (SlideMenu) findViewById(R.id.slide_menu);
 		this.mMapView = (PolarisMapView) findViewById(R.id.polaris_map_view);
-		this.mMapView.getController().setZoom(17);
-		// this.mMapView.setUserTrackingButtonEnabled(true);
+		this.mMapView.getController().setZoom(18);
 		this.mMapView.setUserTrackingButtonEnabled(true);
 		this.mMapView.setOnRegionChangedListenerListener(this);
 		this.mMapView.setOnAnnotationSelectionChangedListener(this);
@@ -119,33 +162,58 @@ public class MainActivity extends SherlockMapActivity implements
 		this.mEditTextAddress.setOnEditorActionListener(mWriteListener);
 		this.mButtonGetTaxi = (ImageButton) findViewById(R.id.button_get_taxi);
 
-		try {
-			this.currentAddress = FacadeAddress.readAllAddress();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-
-		this.mListAddress = (ListView) findViewById(R.id.main_lv_list_tags);
-		this.mAddressAdapter = new AddressAdapter(this, this.currentAddress);
-		this.mListAddress.setAdapter(this.mAddressAdapter);
-
-		this.mListAddress.setOnItemClickListener(onItemClickAddressListView);
 		this.mButtonGetTaxi.setOnClickListener(onClickButtonGetTaxi);
 		this.obtainLocation();
 	}
 
-	/**
-	 * Click on Address ListView
-	 */
-	private final AdapterView.OnItemClickListener onItemClickAddressListView = new AdapterView.OnItemClickListener() {
-		@Override
-		public void onItemClick(AdapterView<?> adapterView, View view,
-				int position, long id) {
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(STATE_ACTIVE_POSITION, mActivePosition);
+		outState.putString(STATE_CONTENT_TEXT, mContentText);
+	}
 
-			mEditTextAddress.setText(((Address) mAddressAdapter
-					.getItem(position)).getAdreess());
-			mSlideMenu.toggle();
+	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			mActivePosition = position;
+
+			mMenuDrawer.setActiveView(view, position);
+			mMenuDrawer.closeMenu();
+
+			switch (mActivePosition) {
+			case 1:
+				Intent intentProfile = new Intent(getApplicationContext(),
+						EditProfileActivity.class);
+				startActivity(intentProfile);
+				break;
+			case 2:
+				Intent intentFavoriteAddress = new Intent(
+						getApplicationContext(),
+						ListFavoriteAddressActivity.class);
+				startActivityForResult(intentFavoriteAddress,
+						CODE_FAVORITE_ADDRESS);
+				break;
+			case 3:
+				Intent intentHistoryServices = new Intent(
+						getApplicationContext(), HistoryActivity.class);
+				startActivity(intentHistoryServices);
+				break;
+			case 5:
+				Intent intentHelpApp = new Intent(getApplicationContext(),
+						HelpActivity.class);
+				startActivity(intentHelpApp);
+				break;
+			case 4:
+				Intent intentAboutActivity = new Intent(
+						getApplicationContext(), AboutActivity.class);
+				startActivity(intentAboutActivity);
+
+			default:
+				break;
+			}
+
 		}
 	};
 
@@ -306,15 +374,9 @@ public class MainActivity extends SherlockMapActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		SubMenu sub = menu
-				.addSubMenu("")
+				.addSubMenu("Menu")
 				.setIcon(
 						com.actionbarsherlock.R.drawable.abs__ic_menu_moreoverflow_holo_light);
-		sub.add(0, com.actionbarsherlock.R.style.Theme_Sherlock_Light, 1,
-				getString(R.string.label_ic_profile_bar));
-		sub.add(0, com.actionbarsherlock.R.style.Theme_Sherlock_Light, 2,
-				getString(R.string.label_ic_address_bar));
-		sub.add(0, com.actionbarsherlock.R.style.Theme_Sherlock_Light, 3,
-				getString(R.string.label_ic_about_bar));
 		sub.getItem().setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_ALWAYS
 						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -324,30 +386,15 @@ public class MainActivity extends SherlockMapActivity implements
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		int op = item.getOrder();
 		int id = item.getItemId();
 
-		switch (op) {
-		case 1:
-			Intent intentProfile = new Intent(getApplicationContext(),
-					EditProfileActivity.class);
-			startActivity(intentProfile);
-			break;
-		case 2:
-			mSlideMenu.toggle();
-			break;
-		case 3:
-			Intent intentAbout = new Intent(getApplicationContext(),
-					AboutActivity.class);
-			startActivity(intentAbout);
-			break;
-		default:
-			break;
-		}
-
+		WidetechLogger.d("el menu es: " + id);
 		switch (id) {
+		case 0:
+			mMenuDrawer.toggleMenu();
+			break;
 		case android.R.id.home:
-			mSlideMenu.toggle();
+			mMenuDrawer.toggleMenu();
 			break;
 
 		default:
@@ -358,10 +405,27 @@ public class MainActivity extends SherlockMapActivity implements
 
 	@Override
 	public void onBackPressed() {
-		if (mSlideMenu.isMenuOpen()) {
-			mSlideMenu.toggle();
-		} else {
-			super.onBackPressed();
+		final int drawerState = mMenuDrawer.getDrawerState();
+		if (drawerState == MenuDrawer.STATE_OPEN
+				|| drawerState == MenuDrawer.STATE_OPENING) {
+			mMenuDrawer.closeMenu();
+			return;
+		}
+		super.onBackPressed();
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+
+		if (requestCode == CODE_FAVORITE_ADDRESS) {
+			if (resultCode == RESULT_OK) {
+
+				Bundle extras = data.getExtras();
+				if (extras != null) {
+					String a = extras.getString("address_result");
+					mEditTextAddress.setText(a);
+				}
+			}
 		}
 	}
 
@@ -449,7 +513,10 @@ public class MainActivity extends SherlockMapActivity implements
 				String c = address.get(5).getAddressLine(0).split(",")[0]
 						.toString();
 				if (this.mAddress.equalsIgnoreCase(a != null ? a : "")) {
-					displayMessage(getString(R.string.verify_address));
+					// displayMessage(getString(R.string.verify_address));
+					WideTechTools.displayMessage(
+							getString(R.string.verify_address),
+							getApplicationContext(), MainActivity.this);
 					focusView = this.mEditTextAddress;
 					cancel = true;
 				}/*
@@ -484,22 +551,6 @@ public class MainActivity extends SherlockMapActivity implements
 			startActivity(intentSolciteService);
 
 		}
-	}
-
-	private void displayMessage(String message) {
-		// TODO Auto-generated method stub
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.toast_layout_message,
-				(ViewGroup) findViewById(R.id.toast_layout_root));
-
-		TextView text = (TextView) layout.findViewById(R.id.text);
-		text.setText(message);
-
-		Toast toast = new Toast(getApplicationContext());
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
-		toast.setView(layout);
-		toast.show();
 	}
 
 	/**
@@ -671,5 +722,103 @@ public class MainActivity extends SherlockMapActivity implements
 		mMapView.getOverlays().add(item);
 		WidetechLogger.d("posicion marker: " + mMapView.getOverlays().size());
 		mMapView.invalidate();
+	}
+
+	private static class Item {
+
+		String mTitle;
+		int mIconRes;
+
+		Item(String title, int iconRes) {
+			mTitle = title;
+			mIconRes = iconRes;
+		}
+	}
+
+	private static class Category {
+
+		String mTitle;
+
+		Category(String title) {
+			mTitle = title;
+		}
+	}
+
+	private class MenuAdapter extends BaseAdapter {
+
+		private List<Object> mItems;
+
+		MenuAdapter(List<Object> items) {
+			mItems = items;
+		}
+
+		@Override
+		public int getCount() {
+			return mItems.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return mItems.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public int getItemViewType(int position) {
+			return getItem(position) instanceof Item ? 0 : 1;
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+
+		@Override
+		public boolean isEnabled(int position) {
+			return getItem(position) instanceof Item;
+		}
+
+		@Override
+		public boolean areAllItemsEnabled() {
+			return false;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			Object item = getItem(position);
+
+			if (item instanceof Category) {
+				if (v == null) {
+					v = getLayoutInflater().inflate(R.layout.menu_row_category,
+							parent, false);
+				}
+
+				((TextView) v).setText(((Category) item).mTitle);
+
+			} else {
+				if (v == null) {
+					v = getLayoutInflater().inflate(R.layout.menu_row_item,
+							parent, false);
+				}
+
+				TextView tv = (TextView) v;
+				tv.setText(((Item) item).mTitle);
+				tv.setCompoundDrawablesWithIntrinsicBounds(
+						((Item) item).mIconRes, 0, 0, 0);
+			}
+
+			v.setTag(R.id.mdActiveViewPosition, position);
+
+			if (position == mActivePosition) {
+				mMenuDrawer.setActiveView(v, position);
+			}
+
+			return v;
+		}
 	}
 }

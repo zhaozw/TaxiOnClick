@@ -46,9 +46,13 @@
     <string name="verify_city">Verifica que estes en una ciudad donde nuestro servicio funcione.</string>
     <string name="title_dialog_cancel_taxi">Cancelar Taxi</string>
     <string name="message_dialog_cancel_taxi">Está seguro de cancelar este taxi?</string>
+    <string name="message_dialog_arrived_taxi">Confirmas que tu taxi llegó?</string>
+    <string name="title_dialog_arrived_taxi">Taxi llegó</string>
     <string name="dialog_cancel_taxi">Cancelando Taxi&#8230;</string>
     <string name="message_error_cancel_taxi">No pudimos cancelar tu taxi. Algo pasó, intenta más tarde.</string>
     <string name="message_error_location_taxi">De momento no podemos localizar tu taxi.</string>
+    <string name="message_success_cancel_servicio">Tu servicio fue cancelado</string>
+    <string name="message_success_arrived_taxi">Tu taxi llegó</string>
 
     <!-- String from activity Service -->
     <string name="label_total_taxis">Taxis:</string>
@@ -71,9 +75,19 @@
     <string name="label_quick_action_arrived_taxi">Llegó!</string>
     <string name="title_activity_position_taxi">Ubicacion actual del taxi</string>
 
+    <!-- String from history services -->
+    <string name="title_row_service">Servicio #:</string>
+    <string name="desc_plate_taxi">Placa del Taxi:</string>
+    <string name="status_of_service">Estado del servicio:</string>
+
     <!-- String from tags icon actionbarsherlock main -->
+    <string name="label_ic_options_bar">Opciones</string>
     <string name="label_ic_address_bar">Direcciones</string>
     <string name="label_ic_profile_bar">Perfil</string>
+    <string name="label_ic_cancel_bar">Cancelar</string>
+    <string name="label_ic_confirm_bar">Confirmar</string>
+    <string name="label_ic_help_bar">Cómo funciona</string>
+    <string name="label_ic_history_bar">Histórico</string>
     <string name="label_ic_about_bar">Acerca de mitaxi</string>
     <string name="title_activity_edit_profile">Editar Perfil</string>
 
@@ -89,5 +103,13 @@
     <string name="copyright">© Copyright - Taxi Finder</string>
     <string name="used_terms">Términos de uso</string>
     <string name="link_to_web_license">http://www.mitaxiapp.co/disclaimer.htm</string>
+    <string name="title_activity_list_favorite_address">Direcciones favoritas</string>
+    <string name="title_activity_only_taxi">Servicio en camino</string>
+    <string name="title_activity_history">Servicios Solicitados</string>
+
+    <!-- String from status Service -->
+    <string name="status_service_arrived">Finalizado</string>
+    <string name="status_service_in_course">En curso</string>
+    <string name="status_service_cancel">Cancelado</string>
 
 </resources>

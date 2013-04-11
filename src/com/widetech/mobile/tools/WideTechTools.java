@@ -17,6 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import com.widetech.mobile.mitaxiapp.activity.R;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,6 +30,12 @@ import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /*Utilerias de la Aplicacion*/
 
@@ -55,7 +65,9 @@ public class WideTechTools {
 	public static String getImeiPhone(Context context) {
 		TelephonyManager phoneManager = (TelephonyManager) context
 				.getSystemService(Context.TELEPHONY_SERVICE);
+
 		return phoneManager.getDeviceId();
+		// return "351554056021745";
 	}
 
 	/*
@@ -180,5 +192,23 @@ public class WideTechTools {
 		}
 
 		return type;
+	}
+
+	// Display messages with Fancy Style
+	public static void displayMessage(String message, Context context,
+			Activity activity) {
+		// TODO Auto-generated method stub
+		LayoutInflater inflater = activity.getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_layout_message,
+				(ViewGroup) activity.findViewById(R.id.toast_layout_root));
+
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		text.setText(message);
+
+		Toast toast = new Toast(context);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
 	}
 }

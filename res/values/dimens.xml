@@ -16,5 +16,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_size_note_list_description">15sp</dimen>
+    <dimen name="divider_inside_note">1px</dimen>
 
 </resources>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="16dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" >
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/CardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textIsSelectable="false" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/abs__holo_blue_light" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
+
+        <!-- ListRow Left sied Thumbnail image product row -->
+
+        <LinearLayout
+            android:id="@+id/thumbnail_taxi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip" >
+
+            <ImageView
+                android:id="@+id/card_image_taxi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher_mitaxiapp" />
+        </LinearLayout>
+
+        <!-- Plate of taxi -->
+
+        <TextView
+            android:id="@+id/PlateOfTaxi"
+            style="@style/CardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/thumbnail_taxi"
+            android:layout_toRightOf="@+id/thumbnail_taxi"
+            android:textIsSelectable="false"
+            android:textStyle="bold" />
+
+        <!-- Status Of Service -->
+
+        <TextView
+            android:id="@+id/statusService"
+            style="@style/CardLightText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/PlateOfTaxi"
+            android:layout_marginTop="5dip"
+            android:layout_toRightOf="@+id/thumbnail_taxi"
+            android:textColor="@color/abs__holo_blue_light"
+            android:textIsSelectable="false" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItemNote"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/service_row_tv_title"
+        style="@style/ListItemNoteTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true" />
+
+    <TextView
+        android:id="@+id/service_row_tv_description"
+        style="@style/ListItemNoteDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/service_row_tv_title"
+        android:textIsSelectable="true" />
+
+    <ImageView
+        android:id="@+id/note_row_iv_divider"
+        style="@style/ListItemNoteDivider"
+        android:layout_below="@id/service_row_tv_description"
+        android:contentDescription="@string/app_name" />
+
+</RelativeLayout>

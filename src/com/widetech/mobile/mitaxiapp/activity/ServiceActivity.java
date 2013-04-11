@@ -2,9 +2,9 @@ package com.widetech.mobile.mitaxiapp.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import main.java.com.actionbarsherlock.app.SherlockMapActivity;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.widetech.mobile.log.WidetechLogger;
 import com.widetech.mobile.mitaxiapp.activity.R;
@@ -12,27 +12,32 @@ import com.widetech.mobile.mitaxiapp.facade.FacadeAddress;
 import com.widetech.mobile.mitaxiapp.facade.FacadeUser;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
 import com.widetech.mobile.mitaxiapp.object.Address;
+import com.widetech.mobile.mitaxiapp.object.User;
 import com.widetech.mobile.mitaxiapp.xml.XmlFetcherIdService;
 import com.widetech.mobile.mitaxiapp.xml.XmlFetcherMobile;
 import com.widetech.mobile.tools.GlobalConstants;
 import com.widetech.mobile.tools.WideTechTools;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class ServiceActivity extends SherlockActivity {
+public class ServiceActivity extends SherlockMapActivity {
 
 	// UI References
 	private EditText mEditTextTotalTaxis;
@@ -40,13 +45,18 @@ public class ServiceActivity extends SherlockActivity {
 	private EditText mEditTextNeighborhood;
 	private EditText mEditTextReferencePoint;
 	private SeekBar mBarCounterNumberTaxis;
-	private Button mButtonObtainService;
-	private ProgressDialog mProgressDialog;
+	private ImageButton mButtonObtainService;
 
-	private String mAddressForService;
+	// Views Forms
+	private View mServiceFormView;
+	private View mStatusView;
+	private TextView mServiceMessageStatus;
+	private TextView mNameUser;
+
+	private String mAddressForService = "";
 	private int mNumberOfTaxis = 0;
-	private String mReferenceForService;
-	private String mNeighborhoodforService;
+	private String mReferenceForService = "";
+	private String mNeighborhoodforService = "";
 
 	// Connection Detector status network
 	private com.widetech.mobile.tools.ConnectionDetector cd;
@@ -69,32 +79,37 @@ public class ServiceActivity extends SherlockActivity {
 		this.getSupportActionBar().setHomeButtonEnabled(true);
 		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+		Bundle bundle = this.getIntent().getExtras();
+		if (bundle != null) {
+			this.mAddressForService = bundle.getString("address_service");
+			this.mNeighborhoodforService = bundle
+					.getString("neighborhood_service");
+		}
+
+		this.mServiceFormView = (View) findViewById(R.id.service_form);
+		this.mStatusView = (View) findViewById(R.id.service_status);
+		this.mServiceMessageStatus = (TextView) findViewById(R.id.service_status_message);
+		this.mNameUser = (TextView) findViewById(R.id.service_name_user);
+
 		this.mEditTextTotalTaxis = (EditText) findViewById(R.id.totalTaxis);
 		this.mEditTextAddress = (EditText) findViewById(R.id.address);
 		this.mEditTextNeighborhood = (EditText) findViewById(R.id.neighborhood);
 		this.mEditTextReferencePoint = (EditText) findViewById(R.id.point);
 		this.mBarCounterNumberTaxis = (SeekBar) findViewById(R.id.seekBarTotalTaxis);
-		this.mButtonObtainService = (Button) findViewById(R.id.send_info_service);
-
+		this.mButtonObtainService = (ImageButton) findViewById(R.id.send_info_service);
 		this.mEditTextTotalTaxis.setEnabled(false);
 		this.mEditTextTotalTaxis.setText("0");
 		this.mEditTextAddress.setEnabled(false);
-		Bundle bundle = this.getIntent().getExtras();
-		if (bundle != null) {
-			this.mAddressForService = bundle.getString("address_service", "");
-			this.mNeighborhoodforService = bundle.getString(
-					"neighborhood_service", "");
-		}
 
 		this.mBarCounterNumberTaxis.setProgress(DEFAULT_PROGRESS_COUNTER_TAXIS);
-		this.mEditTextTotalTaxis.setText(Integer.toString(DEFAULT_PROGRESS_COUNTER_TAXIS));
+		this.mEditTextTotalTaxis.setText(Integer
+				.toString(DEFAULT_PROGRESS_COUNTER_TAXIS));
 		this.mNumberOfTaxis = DEFAULT_PROGRESS_COUNTER_TAXIS;
 		this.mBarCounterNumberTaxis
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 					public void onProgressChanged(SeekBar seekBar,
 							int progress, boolean fromUser) {
-						mEditTextTotalTaxis
-								.setText(Integer.toString(progress));
+						mEditTextTotalTaxis.setText(Integer.toString(progress));
 						mNumberOfTaxis = progress;
 						WidetechLogger.d("Total de Taxis en : "
 								+ mNumberOfTaxis);
@@ -205,6 +220,47 @@ public class ServiceActivity extends SherlockActivity {
 		}
 	}
 
+	/**
+	 * Shows the progress UI and hides the login form.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
+
+			mStatusView.setVisibility(View.VISIBLE);
+			mStatusView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mStatusView.setVisibility(show ? View.VISIBLE
+									: View.GONE);
+						}
+					});
+
+			mServiceFormView.setVisibility(View.VISIBLE);
+			mServiceFormView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mServiceFormView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mServiceFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
+	}
+
 	protected void findDataForAddress() {
 		try {
 			Address actualAddress = FacadeAddress
@@ -265,8 +321,15 @@ public class ServiceActivity extends SherlockActivity {
 
 		try {
 			restricOrientation();
-			this.mProgressDialog = ProgressDialog.show(this, null,
-					getString(R.string.dialog_message_get_mobile), true, false);
+			// Hide form service
+			getSupportActionBar().hide();
+			User user = FacadeUser.read();
+			if (user != null) {
+				String name = user.getName_text().split(" ")[0];
+				this.mNameUser.setText(name + ":");
+			}
+			this.mServiceMessageStatus.setText("Estamos localizando tu Taxi!");
+			this.showProgress(true);
 			this.mServiceTask = new SendServiceTask();
 			this.mServiceTask.execute((Void) null);
 
@@ -292,6 +355,7 @@ public class ServiceActivity extends SherlockActivity {
 		protected Boolean doInBackground(Void... params) {
 			boolean status = true;
 			boolean service = true;
+			String response = null;
 			int time = 0;
 
 			// Building Parameters
@@ -358,9 +422,11 @@ public class ServiceActivity extends SherlockActivity {
 					.d("Url del registro del usuario en la plataforma de taxis: "
 							+ urlServiceTaxi);
 
-			String response = RequestServer.makeHttpRequest(urlServiceTaxi,
-					GlobalConstants.METHOD_POST, parameters);
-			WidetechLogger.d("resultado del stream: " + response);
+			if (isCancelled() == false) {
+				response = RequestServer.makeHttpRequest(urlServiceTaxi,
+						GlobalConstants.METHOD_POST, parameters);
+				WidetechLogger.d("resultado del stream: " + response);
+			}
 
 			if (response == null)
 				status = false;
@@ -415,6 +481,10 @@ public class ServiceActivity extends SherlockActivity {
 											+ urlServiceGetMobile);
 
 							while (service) {
+								if (isCancelled()) {
+									service = false;
+								}
+								WidetechLogger.d("se detiene en: " + service);
 								try {
 									String responseGetMobile = RequestServer
 											.makeHttpRequest(
@@ -482,29 +552,51 @@ public class ServiceActivity extends SherlockActivity {
 		}
 
 		protected void onPostExecute(final Boolean success) {
-			mProgressDialog.dismiss();
+			showProgress(false);
 			if (success) {
-				Intent intentShowMobiles = new Intent(getApplicationContext(),
-						MobileListActivity.class);
-				startActivity(intentShowMobiles);
-				finish();
+				if (mNumberOfTaxis == 1) {
+					Intent intentShowOnlyMobile = new Intent(
+							getApplicationContext(), OnlyTaxiActivity.class);
+					startActivity(intentShowOnlyMobile);
+					finish();
+				} else {
+					Intent intentShowMobiles = new Intent(
+							getApplicationContext(), MobileListActivity.class);
+					startActivity(intentShowMobiles);
+					finish();
+				}
 
 			} else {
-				Toast.makeText(getApplicationContext(),
-						getString(R.string.mobile_not_found), Toast.LENGTH_LONG)
-						.show();
+				getSupportActionBar().show();
+				WideTechTools.displayMessage(
+						getString(R.string.mobile_not_found),
+						getApplicationContext(), ServiceActivity.this);
 			}
-			mProgressDialog = null;
 			mServiceTask = null;
 		}
 
 		protected void onCancelled() {
-			Toast.makeText(getApplicationContext(),
+			showProgress(false);
+			WideTechTools.displayMessage(
 					getString(R.string.service_mobile_canceled),
-					Toast.LENGTH_LONG).show();
-			mProgressDialog.dismiss();
-			mProgressDialog = null;
-			mServiceTask = null;
+					getApplicationContext(), ServiceActivity.this);
+		}
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+
+		if ((mServiceTask != null)
+				&& (mServiceTask.getStatus() != AsyncTask.Status.FINISHED)) {
+			mServiceTask.cancel(true);
 		}
 	}
 }

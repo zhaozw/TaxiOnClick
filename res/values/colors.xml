@@ -67,5 +67,8 @@
     <color name="background_menu">#80000000</color>
     <color name="text_title">#ff989089</color>
     <color name="background_app">#ebebeb</color>
+    <color name="md__transparent">#00000000</color>
+    <color name="divider_note">#ededed</color>
+    <color name="taxi_color">#ffffd90e</color>
 
 </resources>

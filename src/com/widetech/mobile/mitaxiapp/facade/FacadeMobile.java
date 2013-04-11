@@ -34,4 +34,8 @@ public class FacadeMobile {
 	public static long updateMobile(Mobile mobile) {
 		return DacMobile.update(mobile);
 	}
+
+	public static ArrayList<Mobile> readMobileByLastService() {
+		return DacMobile.readMobileByLastService();
+	}
 }

@@ -16,7 +16,7 @@ package com.widetech.mobile.tools;
 public class GlobalConstants {
 
 	// Status del log de widetech
-	public static final boolean LOG_DEBUG_ENABLED = true;
+	public static final boolean LOG_DEBUG_ENABLED = false;
 
 	// Taga para el loger de widetech
 	public static final String TAG_APP = "mitaxi";

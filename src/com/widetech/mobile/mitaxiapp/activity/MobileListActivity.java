@@ -18,6 +18,8 @@ import com.widetech.mobile.mitaxiapp.xml.XmlFetcherCancelTaxi;
 import com.widetech.mobile.mitaxiapp.xml.XmlFetcherPositionTaxi;
 import com.widetech.mobile.tools.ConnectionDetector;
 import com.widetech.mobile.tools.GlobalConstants;
+import com.widetech.mobile.tools.WideTechTools;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -202,7 +204,6 @@ public class MobileListActivity extends SherlockListActivity {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-
 	}
 
 	protected void attemptPositionTaxi() {
@@ -330,9 +331,9 @@ public class MobileListActivity extends SherlockListActivity {
 				intentActualPositionTaxi.putExtra("id_taxi", mobileIdPosition);
 				startActivity(intentActualPositionTaxi);
 			} else {
-				Toast.makeText(getApplicationContext(),
+				WideTechTools.displayMessage(
 						getString(R.string.message_error_location_taxi),
-						Toast.LENGTH_LONG).show();
+						getApplicationContext(), MobileListActivity.this);
 			}
 
 			mPositionTask = null;
@@ -434,9 +435,9 @@ public class MobileListActivity extends SherlockListActivity {
 				}
 
 			} else {
-				Toast.makeText(getApplicationContext(),
+				WideTechTools.displayMessage(
 						getString(R.string.message_error_cancel_taxi),
-						Toast.LENGTH_LONG).show();
+						getApplicationContext(), MobileListActivity.this);
 			}
 		}
 

@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OnlyTaxiActivity" >
+
+    <com.cyrilmottier.polaris.PolarisMapView
+        android:id="@+id/polaris_map_view_only_taxi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:apiKey="@string/android_key_maps_production" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:fitsSystemWindows="true" >
+
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/whitespace" >
+
+            <TextView
+                android:id="@+id/stat_course"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@color/black_overlay"
+                android:gravity="center"
+                android:text="Tiempo de llegada: 5 minutos"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>

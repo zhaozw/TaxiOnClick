@@ -1,7 +1,6 @@
 package com.widetech.mobile.mitaxiapp.adapters;
 
 import java.util.ArrayList;
-
 import com.widetech.mobile.mitaxiapp.activity.R;
 import com.widetech.mobile.mitaxiapp.object.Mobile;
 import android.content.Context;

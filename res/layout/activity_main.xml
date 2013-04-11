@@ -1,69 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.widetech.mobile.mitaxiapp.components.ui.widgets.SlideMenu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/slide_menu"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000" >
 
-    <ListView
-        android:id="@+id/main_lv_list_tags"
-        style="@style/MenuContent" />
-
-    <RelativeLayout
+    <com.cyrilmottier.polaris.PolarisMapView
+        android:id="@+id/polaris_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000" >
+        android:apiKey="@string/android_key_maps_production" />
 
-        <com.cyrilmottier.polaris.PolarisMapView
-            android:id="@+id/polaris_map_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:apiKey="@string/android_key_maps_debug" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:background="@color/black_overlay"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/editTextActualAddress"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.00"
+            android:hint="@string/hint_actual_address_edittext"
+            android:inputType="textPersonName"
+            android:textColor="#ffd90e"
+            android:textColorHint="#ffd90e" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:fitsSystemWindows="true" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal" >
-
-            <EditText
-                android:id="@+id/editTextActualAddress"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.00"
-                android:hint="@string/hint_actual_address_edittext"
-                android:inputType="textPersonName"
-                android:textColor="#ffd90e"
-                android:textColorHint="#ffd90e" >
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
-
-        <FrameLayout
+            android:id="@+id/fullscreen_content_controls"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
             android:background="@color/transparent"
-            android:fitsSystemWindows="true" >
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/whitespace" >
 
-            <LinearLayout
-                android:id="@+id/fullscreen_content_controls"
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/button_get_taxi"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
+                android:layout_weight="1"
                 android:background="@color/transparent"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/whitespace" >
+                android:src="@drawable/get_tax_button" />
+        </LinearLayout>
+    </FrameLayout>
 
-                <ImageButton
-                    android:id="@+id/button_get_taxi"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:src="@drawable/get_tax_button" />
-            </LinearLayout>
-        </FrameLayout>
-    </RelativeLayout>
-
-</com.widetech.mobile.mitaxiapp.components.ui.widgets.SlideMenu>
+</RelativeLayout>

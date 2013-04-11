@@ -8,6 +8,6 @@
         android:id="@+id/polaris_map_view_position_taxi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:apiKey="@string/android_key_maps_debug"/>
+        android:apiKey="@string/android_key_maps_production"/>
 
 </RelativeLayout>
