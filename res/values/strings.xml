@@ -64,6 +64,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_table_data_service">Datos del servicio</string>
+    <string name="find_taxi_message">Estamos Localizando tu taxi!</string>
 
     <!-- String from buttons dialog -->
     <string name="label_button_dialog_ok">Si</string>
@@ -85,6 +86,7 @@
     <string name="label_ic_address_bar">Direcciones</string>
     <string name="label_ic_profile_bar">Perfil</string>
     <string name="label_ic_cancel_bar">Cancelar</string>
+    <string name="label_ic_close_bar">Cerrar</string>
     <string name="label_ic_confirm_bar">Confirmar</string>
     <string name="label_ic_help_bar">Cómo funciona</string>
     <string name="label_ic_history_bar">Histórico</string>
@@ -111,5 +113,11 @@
     <string name="status_service_arrived">Finalizado</string>
     <string name="status_service_in_course">En curso</string>
     <string name="status_service_cancel">Cancelado</string>
+
+    <!-- String from message empty History -->
+    <string name="no_exists_history">No tienes servicios solicitados últimamente</string>
+
+    <!-- String from message empty favorite Address -->
+    <string name="no_exists_favorite_address">No tienes direcciones favoritas</string>
 
 </resources>

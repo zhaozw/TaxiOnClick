@@ -18,7 +18,6 @@ import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListe
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
 import com.google.android.maps.GeoPoint;
 import com.widetech.mobile.log.WidetechLogger;
-import com.widetech.mobile.mitaxiapp.app.Application;
 import com.widetech.mobile.mitaxiapp.facade.FacadeMobile;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
 import com.widetech.mobile.mitaxiapp.object.Mobile;
@@ -30,8 +29,14 @@ import com.widetech.mobile.tools.GlobalConstants;
 import com.widetech.mobile.tools.WideTechTools;
 import main.java.com.actionbarsherlock.app.SherlockMapActivity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
@@ -43,9 +48,14 @@ import android.widget.Toast;
 public class OnlyTaxiActivity extends SherlockMapActivity implements
 		OnRegionChangedListener, OnAnnotationSelectionChangedListener {
 
+	//IMEI : 351554056021745
 	private PolarisMapView mMapView;
 	private TextView mTextTimeCourse;
 	private ProgressDialog mProgressDialogCancelTaxi;
+	private PendingIntent pendingIntent;
+	private Notification mNotification;
+	private NotificationManager mNotificationManager;
+	private SharedPreferences mPreferences;
 
 	private String plateTaxi = "";
 	private ArrayList<GeoPoint> points;
@@ -74,8 +84,14 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_only_taxi);
+		WidetechLogger.d("La actividad se crea");
 
-		idService = ((Application) this.getApplication()).getId();
+		this.mPreferences = getSharedPreferences(
+				GlobalConstants.PREFERENCES_TAG, Context.MODE_PRIVATE);
+
+		idService = checkLastId();
+
+		mobileInCourse = new ArrayList<Mobile>();
 
 		findMobileInCourse();
 
@@ -100,6 +116,22 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 
 			}
 		}, 10000, 60000);
+
+		pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+		// Build notification
+		// Actions are just fake
+		mNotification = new Notification.Builder(this)
+				.setContentTitle("Tu taxi esta en camino!")
+				.setContentText("Placa: " + mobileInCourse.get(0).getPlate())
+				.setSmallIcon(R.drawable.ic_launcher_mitaxiapp)
+				.setSound(null, Notification.DEFAULT_SOUND)
+				.setContentIntent(pendingIntent).build();
+		mNotification.flags = Notification.FLAG_NO_CLEAR;
+
+		mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		mNotificationManager.notify(0, mNotification);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,10 +171,12 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 
 	private void findMobileInCourse() {
 		// TODO Auto-generated method stub
+		WidetechLogger.d("se ejecuta la función");
+		WidetechLogger.d("id del servicio: " + idService);
 		try {
 			mobileInCourse = FacadeMobile.readMobilesForServiceId(idService);
 
-			if (mobileInCourse != null) {
+			if ((mobileInCourse != null) && (mobileInCourse.size() != 0)) {
 				mobileIdPosition = mobileInCourse.get(0).getId_position();
 				plateTaxi = mobileInCourse.get(0).getPlate();
 			}
@@ -157,7 +191,7 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-
+		WidetechLogger.d("destruido");
 		if (timer != null)
 			timer.cancel();
 	}
@@ -207,7 +241,8 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 		ConnectionDetector connection = new ConnectionDetector(
 				getApplicationContext());
 		if (!(connection.isConnectingToInternet())) {
-			Toast.makeText(this, getString(R.string.error_internet_connection),
+			Toast.makeText(OnlyTaxiActivity.this,
+					getString(R.string.error_internet_connection),
 					Toast.LENGTH_LONG).show();
 			return;
 		} else {
@@ -233,7 +268,8 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 		ConnectionDetector connection = new ConnectionDetector(
 				getApplicationContext());
 		if (!(connection.isConnectingToInternet())) {
-			Toast.makeText(this, getString(R.string.error_internet_connection),
+			Toast.makeText(OnlyTaxiActivity.this,
+					getString(R.string.error_internet_connection),
 					Toast.LENGTH_LONG).show();
 			return;
 		} else {
@@ -245,7 +281,8 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 	private void questionCancelTaxi() {
 		// TODO Auto-generated method stub
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				OnlyTaxiActivity.this);
 		builder.setMessage(R.string.message_dialog_cancel_taxi)
 				.setTitle(R.string.title_dialog_cancel_taxi)
 				.setCancelable(false)
@@ -271,7 +308,8 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 
 	private void questionArrivedTaxi() {
 		// TODO Auto-generated method stub
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				OnlyTaxiActivity.this);
 		builder.setMessage(R.string.message_dialog_arrived_taxi)
 				.setTitle(R.string.title_dialog_arrived_taxi)
 				.setCancelable(false)
@@ -313,7 +351,8 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 
 		try {
 			this.restricOrientation();
-			this.mProgressDialogCancelTaxi = ProgressDialog.show(this, null,
+			this.mProgressDialogCancelTaxi = ProgressDialog.show(
+					OnlyTaxiActivity.this, null,
 					getString(R.string.dialog_cancel_taxi), true, false);
 			this.mCancelTaxiTask = new CancelTaxiTask();
 			this.mCancelTaxiTask.execute((Void) null);
@@ -444,6 +483,10 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 					.add(new BasicNameValuePair(
 							getString(R.string.parameter_service_id_request_position_taxi),
 							mobileIdPosition));
+			for (int i = 0; i < parameters.size(); i++) {
+				WidetechLogger.d("clave: " + parameters.get(i).getName()
+						+ " valor: " + parameters.get(i).getValue());
+			}
 
 			// Create url from actual position taxi
 			String urlPositionTaxi = new String(
@@ -600,6 +643,20 @@ public class OnlyTaxiActivity extends SherlockMapActivity implements
 	}
 
 	public void onBackPressed() {
+		super.onBackPressed();
+	}
 
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		WidetechLogger.d("restaurado");
+	}
+
+	private int checkLastId() {
+
+		int lastId = this.mPreferences.getInt(
+				GlobalConstants.NAME_PREFERENCE_LAST_ID_SERVICE, 0);
+		return lastId;
 	}
 }

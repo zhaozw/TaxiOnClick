@@ -1,35 +1,35 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true" >
+    android:gravity="center_vertical" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textViewTutorial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/imageViewResourceTutorial"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="@string/copyright"
-            android:textColor="#FFFFFF" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shadow_image"
+        android:paddingBottom="9.0dip"
+        android:paddingLeft="2.0dip"
+        android:paddingRight="9.0dip"
+        android:paddingTop="2.0dip" >
 
         <ImageView
-            android:id="@+id/imageViewResourceTutorial"
+            android:id="@+id/imageViewScreenTutorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/tut" />
+            android:src="@drawable/screen1" />
+    </LinearLayout>
 
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/imageViewResourceTutorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/tutor_1" />
 
-</ScrollView>
+</RelativeLayout>

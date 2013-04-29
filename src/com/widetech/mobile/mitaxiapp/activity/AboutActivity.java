@@ -67,7 +67,7 @@ public class AboutActivity extends SherlockActivity {
 			} else if (event.getAction() == MotionEvent.ACTION_UP
 					|| event.getAction() == MotionEvent.ACTION_CANCEL) {
 				// Change it back
-				mTextViewDisclamer.setTextColor(0xFF000000);
+				mTextViewDisclamer.setTextColor(0xff33b5e5);
 			}
 			return false;
 		}

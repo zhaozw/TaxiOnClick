@@ -82,6 +82,7 @@
         <activity
             android:name="com.widetech.mobile.mitaxiapp.activity.OnlyTaxiActivity"
             android:label="@string/title_activity_only_taxi"
+            android:noHistory="true"
             android:theme="@style/Theme.AndroidDevelopers" >
         </activity>
         <activity

@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 
 public abstract class BaseHelpActivity extends SherlockFragmentActivity {
 
-	TestFragmentAdapter mAdapter;
+	TutorialFragmentAdapter mAdapter;
 	ViewPager mPager;
 	PageIndicator mIndicator;
 }

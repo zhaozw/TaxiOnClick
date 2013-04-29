@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import com.actionbarsherlock.view.MenuItem;
 import com.widetech.mobile.log.WidetechLogger;
 import com.widetech.mobile.mitaxiapp.activity.R;
+import com.widetech.mobile.mitaxiapp.app.Application;
 import com.widetech.mobile.mitaxiapp.facade.FacadeAddress;
 import com.widetech.mobile.mitaxiapp.facade.FacadeUser;
 import com.widetech.mobile.mitaxiapp.net.RequestServer;
@@ -21,8 +22,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -52,6 +55,8 @@ public class ServiceActivity extends SherlockMapActivity {
 	private View mStatusView;
 	private TextView mServiceMessageStatus;
 	private TextView mNameUser;
+	private SharedPreferences mPreferences;
+	private SharedPreferences.Editor mEditor;
 
 	private String mAddressForService = "";
 	private int mNumberOfTaxis = 0;
@@ -78,6 +83,9 @@ public class ServiceActivity extends SherlockMapActivity {
 		setContentView(R.layout.activity_service);
 		this.getSupportActionBar().setHomeButtonEnabled(true);
 		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		this.mPreferences = getSharedPreferences(
+				GlobalConstants.PREFERENCES_TAG, Context.MODE_PRIVATE);
 
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
@@ -328,7 +336,8 @@ public class ServiceActivity extends SherlockMapActivity {
 				String name = user.getName_text().split(" ")[0];
 				this.mNameUser.setText(name + ":");
 			}
-			this.mServiceMessageStatus.setText("Estamos localizando tu Taxi!");
+			this.mServiceMessageStatus
+					.setText(getString(R.string.find_taxi_message));
 			this.showProgress(true);
 			this.mServiceTask = new SendServiceTask();
 			this.mServiceTask.execute((Void) null);
@@ -440,9 +449,10 @@ public class ServiceActivity extends SherlockMapActivity {
 					else {
 						WidetechLogger.d("id del servicio: " + statusResponse);
 						if (!(statusResponse.compareTo("-1") == 0)) {
-							((com.widetech.mobile.mitaxiapp.app.Application) ServiceActivity.this
+							((Application) ServiceActivity.this
 									.getApplication()).setId(Integer
 									.parseInt(statusResponse));
+							storeSharedPrefs(Integer.parseInt(statusResponse));
 							// Building Parameters
 							List<NameValuePair> parametersRequestMobile = new ArrayList<NameValuePair>();
 
@@ -598,5 +608,12 @@ public class ServiceActivity extends SherlockMapActivity {
 				&& (mServiceTask.getStatus() != AsyncTask.Status.FINISHED)) {
 			mServiceTask.cancel(true);
 		}
+	}
+
+	protected void storeSharedPrefs(int value) {
+		this.mEditor = mPreferences.edit();
+		this.mEditor.putInt(GlobalConstants.NAME_PREFERENCE_LAST_ID_SERVICE,
+				value);
+		this.mEditor.commit();
 	}
 }

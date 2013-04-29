@@ -16,11 +16,21 @@ package com.widetech.mobile.tools;
 public class GlobalConstants {
 
 	// Status del log de widetech
-	public static final boolean LOG_DEBUG_ENABLED = false;
+	public static final boolean LOG_DEBUG_ENABLED = true;
 
-	// Taga para el loger de widetech
+	// Tag para el loger de widetech
 	public static final String TAG_APP = "mitaxi";
 
+	// Tag para las preferencias de mitaxi
+	public static final String PREFERENCES_TAG = "mitaxipreferences";
+
+	// Nombre de la preferencia de verificacion cuando se abre la app por
+	// primera vez
+	public static final String NAME_PREFERENCE_FIRST_OPENED_TAG = "first";
+
+	// Nombre de la preferencia de el ultimo id del servicio solicitado
+	public static final String NAME_PREFERENCE_LAST_ID_SERVICE = "lastid";
+	
 	// El nombre como prefijo de plataforma
 	public static final String NAME_PLATTFORM_ANDROID = "Android";
 

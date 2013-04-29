@@ -120,10 +120,10 @@ public class MainActivity extends SherlockMapActivity implements
 				R.drawable.ic_favorite_address));
 		items.add(new Item(getString(R.string.label_ic_history_bar),
 				R.drawable.ic_history_service));
-		/*
-		 * items.add(new Item(getString(R.string.label_ic_help_bar),
-		 * R.drawable.ic_action_help));
-		 */
+
+		items.add(new Item(getString(R.string.label_ic_help_bar),
+				R.drawable.ic_action_help));
+
 		items.add(new Item(getString(R.string.label_ic_about_bar),
 				R.drawable.ic_action_about));
 
@@ -200,12 +200,13 @@ public class MainActivity extends SherlockMapActivity implements
 						getApplicationContext(), HistoryActivity.class);
 				startActivity(intentHistoryServices);
 				break;
-			case 5:
+			case 4:
 				Intent intentHelpApp = new Intent(getApplicationContext(),
 						HelpActivity.class);
+				intentHelpApp.putExtra("fromTutorial", false);
 				startActivity(intentHelpApp);
 				break;
-			case 4:
+			case 5:
 				Intent intentAboutActivity = new Intent(
 						getApplicationContext(), AboutActivity.class);
 				startActivity(intentAboutActivity);
